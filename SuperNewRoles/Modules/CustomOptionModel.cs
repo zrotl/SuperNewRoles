@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AmongUs.GameOptions;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -378,6 +379,7 @@ public class CustomOption
     public virtual void UpdateSelection(int newSelection)
     {
         selection = Mathf.Clamp((newSelection + selections.Length) % selections.Length, 0, selections.Length - 1);
+        GameOptionsDataPatch.UpdateData();
         if (optionBehaviour is not null and StringOption stringOption)
         {
             stringOption.oldValue = stringOption.Value = selection;
@@ -1020,6 +1022,16 @@ public class AmongUsClientOnPlayerJoinedPatch
     }
 }
 
+[HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.ValueChanged))]
+public class GameOptionsMenuValueChangedPatch
+{
+    public static void Postfix()
+    {
+        Task.Run(GameOptionsDataPatch.UpdateData);
+    }
+}
+
+
 [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
 static class GameOptionsMenuUpdatePatch
 {
@@ -1285,18 +1297,16 @@ class GameOptionsDataPatch
         return string.Join("\n", options);
     }
     public static string DefaultResult = "";
-    public static string ResultData()
+    public static List<string> ResultPages = null;
+    public static void UpdateData()
     {
+        List<string> pages = new();
+
         bool hideSettings = AmongUsClient.Instance?.AmHost == false && CustomOptionHolder.hideSettings.GetBool();
         if (hideSettings)
         {
-            return DefaultResult;
+            return;
         }
-
-        List<string> pages = new()
-            {
-                DefaultResult
-            };
 
         StringBuilder entry = new();
         List<string> entries = new()
@@ -1420,10 +1430,16 @@ class GameOptionsDataPatch
             pages.Add(page);
         }
 
-        int numPages = pages.Count;
+        ResultPages = pages;
+    }
+    public static string ResultData()
+    {
+        if (ResultPages == null) UpdateData();
+        int numPages = ResultPages.Count;
         SuperNewRolesPlugin.optionsMaxPage = numPages - 1;
         int counter = SuperNewRolesPlugin.optionsPage %= numPages;
-        return pages[counter].Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" ({counter + 1}/{numPages})";
+        if (counter == 0) return DefaultResult;
+        return ResultPages[counter-1].Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" ({counter + 1}/{numPages})";
     }
     public static void Postfix(ref string __result)
     {
