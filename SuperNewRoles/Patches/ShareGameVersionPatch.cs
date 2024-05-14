@@ -34,17 +34,15 @@ class ShareGameVersion
 
     public static void SendVersionRPC()
     {
-        Task.Run(() => {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareSNRVersion, SendOption.Reliable, -1);
-            writer.WritePacked(SuperNewRolesPlugin.ThisVersion.Major);
-            writer.WritePacked(SuperNewRolesPlugin.ThisVersion.Minor);
-            writer.WritePacked(SuperNewRolesPlugin.ThisVersion.Build);
-            writer.WritePacked(AmongUsClient.Instance.ClientId);
-            writer.Write((byte)(SuperNewRolesPlugin.ThisVersion.Revision < 0 ? 0xFF : SuperNewRolesPlugin.ThisVersion.Revision));
-            writer.Write(ModuleVersion);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.ShareSNRversion(SuperNewRolesPlugin.ThisVersion.Major, SuperNewRolesPlugin.ThisVersion.Minor, SuperNewRolesPlugin.ThisVersion.Build, SuperNewRolesPlugin.ThisVersion.Revision, Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId, AmongUsClient.Instance.ClientId);
-        });
+        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareSNRVersion, SendOption.Reliable, -1);
+        writer.WritePacked(SuperNewRolesPlugin.ThisVersion.Major);
+        writer.WritePacked(SuperNewRolesPlugin.ThisVersion.Minor);
+        writer.WritePacked(SuperNewRolesPlugin.ThisVersion.Build);
+        writer.WritePacked(AmongUsClient.Instance.ClientId);
+        writer.Write((byte)(SuperNewRolesPlugin.ThisVersion.Revision < 0 ? 0xFF : SuperNewRolesPlugin.ThisVersion.Revision));
+        writer.Write(ModuleVersion);
+        AmongUsClient.Instance.FinishRpcImmediately(writer);
+        RPCProcedure.ShareSNRversion(SuperNewRolesPlugin.ThisVersion.Major, SuperNewRolesPlugin.ThisVersion.Minor, SuperNewRolesPlugin.ThisVersion.Build, SuperNewRolesPlugin.ThisVersion.Revision, Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId, AmongUsClient.Instance.ClientId);
     }
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
