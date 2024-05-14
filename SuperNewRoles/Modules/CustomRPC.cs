@@ -1199,7 +1199,11 @@ public static class RPCProcedure
             ver = new(major, minor, build);
         else
             ver = new(major, minor, build, revision);
-        ShareGameVersion.GameStartManagerUpdatePatch.VersionPlayers[clientId] = new PlayerVersion(ver, guid);
+        //ShareGameVersion.GameStartManagerUpdatePatch.VersionPlayers[clientId] = new PlayerVersion(ver, guid);
+        if (!ShareGameVersion.GameStartManagerUpdatePatch.VersionPlayers.ContainsKey(clientId) || !ShareGameVersion.GameStartManagerUpdatePatch.VersionPlayers[clientId].Equals(ver, guid))
+        {
+            ShareGameVersion.GameStartManagerUpdatePatch.VersionPlayers[clientId] = new PlayerVersion(ver, guid);
+        }
     }
     public static void SetRole(byte playerid, byte RPCRoleId)
     {
