@@ -1435,7 +1435,7 @@ class GameOptionsDataPatch
     public static string ResultData()
     {
         if (ResultPages == null) UpdateData();
-        int numPages = ResultPages.Count;
+        int numPages = ResultPages.Count + 1;
         SuperNewRolesPlugin.optionsMaxPage = numPages - 1;
         int counter = SuperNewRolesPlugin.optionsPage %= numPages;
         if (counter == 0) return DefaultResult;
