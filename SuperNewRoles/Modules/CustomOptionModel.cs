@@ -379,7 +379,6 @@ public class CustomOption
     public virtual void UpdateSelection(int newSelection)
     {
         selection = Mathf.Clamp((newSelection + selections.Length) % selections.Length, 0, selections.Length - 1);
-        GameOptionsDataPatch.UpdateData();
         if (optionBehaviour is not null and StringOption stringOption)
         {
             stringOption.oldValue = stringOption.Value = selection;
@@ -546,6 +545,7 @@ public static class GameSettingMenuClosePatch
             OptionSaver.WriteNowOptions();
             CustomOption.IsValuesUpdated = false;
         }
+        GameOptionsDataPatch.UpdateData();
     }
 }
 
@@ -1438,7 +1438,7 @@ class GameOptionsDataPatch
         int numPages = ResultPages.Count + 1;
         SuperNewRolesPlugin.optionsMaxPage = numPages - 1;
         int counter = SuperNewRolesPlugin.optionsPage %= numPages;
-        if (counter == 0) return DefaultResult;
+        if (counter == 0) return DefaultResult.Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" ({counter + 1}/{numPages})";
         return ResultPages[counter-1].Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" ({counter + 1}/{numPages})";
     }
     public static void Postfix(ref string __result)
