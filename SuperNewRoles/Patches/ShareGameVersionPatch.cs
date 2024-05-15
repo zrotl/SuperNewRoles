@@ -42,6 +42,7 @@ class ShareGameVersion
         writer.Write((byte)(SuperNewRolesPlugin.ThisVersion.Revision < 0 ? 0xFF : SuperNewRolesPlugin.ThisVersion.Revision));
         writer.Write(ModuleVersion);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
+        SuperNewRolesPlugin.Logger.LogInfo("[VersionShare]Version Shared!");
         RPCProcedure.ShareSNRversion(SuperNewRolesPlugin.ThisVersion.Major, SuperNewRolesPlugin.ThisVersion.Minor, SuperNewRolesPlugin.ThisVersion.Build, SuperNewRolesPlugin.ThisVersion.Revision, Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId, AmongUsClient.Instance.ClientId);
     }
 
@@ -52,7 +53,6 @@ class ShareGameVersion
         {
             if (PlayerControl.LocalPlayer != null)
             {
-                SuperNewRolesPlugin.Logger.LogInfo("[VersionShare]Version Shared!");
                 SendVersionRPC();
                 //MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareSNRVersion, SendOption.Reliable, -1);
                 //writer.WritePacked(SuperNewRolesPlugin.ThisVersion.Major);
@@ -79,7 +79,6 @@ class ShareGameVersion
             GameStartManagerUpdatePatch.Proce = 0;
             GameStartManagerUpdatePatch.LastBlockStart = false;
             GameStartManagerUpdatePatch.VersionPlayers = new Dictionary<int, PlayerVersion>();
-            SendVersionRPC();
         }
     }
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
@@ -113,7 +112,7 @@ class ShareGameVersion
                 }
             }
             Proce++;
-            if (Proce >= 300)
+            if (Proce >= 60)
             {
                 SendVersionRPC();
                 //MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareSNRVersion, SendOption.Reliable, -1);
