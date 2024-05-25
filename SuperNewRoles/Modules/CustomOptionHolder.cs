@@ -955,6 +955,11 @@ public class CustomOptionHolder
     //    return ModHelpers.GetCs(c, ss);
     //}
 
+    public static string GetCsWithTranslation(Color c, string s)
+    {
+        return ModHelpers.GetCs(c, s);
+    }
+
     public static byte ToByte(float f)
     {
         f = Mathf.Clamp01(f);
@@ -970,41 +975,41 @@ public class CustomOptionHolder
             LeveTransed.Add(ModTranslation.GetString(data));
         }
         LevelingerTexts = LeveTransed.ToArray();
-        presetSelection = Create(0, true, CustomOptionType.Generic, ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingpresetSelection"), presets, null, true);
+        presetSelection = Create(0, true, CustomOptionType.Generic, GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingpresetSelection"), presets, null, true);
 
         specialOptions = new CustomOptionBlank(null);
-        hideSettings = Create(100100, true, CustomOptionType.Generic, ModHelpers.GetCs(Color.white, "SettingsHideSetting"), false, specialOptions);
+        hideSettings = Create(100100, true, CustomOptionType.Generic, GetCsWithTranslation(Color.white, "SettingsHideSetting"), false, specialOptions);
 
         /* |: ========================= Mod Normal Settings ========================== :| */
 
-        impostorRolesCountMax = Create(100200, true, CustomOptionType.Generic, ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxImpoRole"), 0f, 0f, 15f, 1f);
-        neutralRolesCountMax = Create(100300, true, CustomOptionType.Generic, ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxNeutralRole"), 0f, 0f, 15f, 1f);
-        crewmateRolesCountMax = Create(100400, true, CustomOptionType.Generic, ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxCrewRole"), 0f, 0f, 15f, 1f);
-        impostorGhostRolesCountMax = Create(100500, true, CustomOptionType.Generic, ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxImpoGhostRole"), 0f, 0f, 15f, 1f);
-        neutralGhostRolesCountMax = Create(100600, true, CustomOptionType.Generic, ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxNeutralGhostRole"), 0f, 0f, 15f, 1f);
-        crewmateGhostRolesCountMax = Create(100700, true, CustomOptionType.Generic, ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxCrewGhostRole"), 0f, 0f, 15f, 1f);
+        impostorRolesCountMax = Create(100200, true, CustomOptionType.Generic, GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxImpoRole"), 0f, 0f, 15f, 1f);
+        neutralRolesCountMax = Create(100300, true, CustomOptionType.Generic, GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxNeutralRole"), 0f, 0f, 15f, 1f);
+        crewmateRolesCountMax = Create(100400, true, CustomOptionType.Generic, GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxCrewRole"), 0f, 0f, 15f, 1f);
+        impostorGhostRolesCountMax = Create(100500, true, CustomOptionType.Generic, GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxImpoGhostRole"), 0f, 0f, 15f, 1f);
+        neutralGhostRolesCountMax = Create(100600, true, CustomOptionType.Generic, GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxNeutralGhostRole"), 0f, 0f, 15f, 1f);
+        crewmateGhostRolesCountMax = Create(100700, true, CustomOptionType.Generic, GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), "SettingMaxCrewGhostRole"), 0f, 0f, 15f, 1f);
 
         if (ConfigRoles.DebugMode.Value)
         {
             Color debugColor = (Color)RoleClass.Debugger.color;
-            IsDebugMode = Create(100800, true, CustomOptionType.Generic, ModHelpers.GetCs(debugColor, "デバッグモード"), false, null, isHeader: true);
-            DebugModeFastStart = Create(100801, true, CustomOptionType.Generic, ModHelpers.GetCs(debugColor, "即開始"), false, IsDebugMode);
-            CanUseChatWhenTaskPhase = Create(100802, true, CustomOptionType.Generic, ModHelpers.GetCs(debugColor, "タスクフェイズ中にチャットを使える"), false, IsDebugMode);
-            IsMurderPlayerAnnounce = Create(100803, true, CustomOptionType.Generic, ModHelpers.GetCs(debugColor, "MurderPlayer発生時に通知を行う"), false, IsDebugMode);
+            IsDebugMode = Create(100800, true, CustomOptionType.Generic, GetCsWithTranslation(debugColor, "デバッグモード"), false, null, isHeader: true);
+            DebugModeFastStart = Create(100801, true, CustomOptionType.Generic, GetCsWithTranslation(debugColor, "即開始"), false, IsDebugMode);
+            CanUseChatWhenTaskPhase = Create(100802, true, CustomOptionType.Generic, GetCsWithTranslation(debugColor, "タスクフェイズ中にチャットを使える"), false, IsDebugMode);
+            IsMurderPlayerAnnounce = Create(100803, true, CustomOptionType.Generic, GetCsWithTranslation(debugColor, "MurderPlayer発生時に通知を行う"), false, IsDebugMode);
         }
 
         Color roomSetting = new(238f / 187f, 204f / 255f, 203f / 255f, 1f);
-        DisconnectNotPCOption = Create(100900, true, CustomOptionType.Generic, ModHelpers.GetCs(roomSetting, "DisconnectNotPC"), true, null, isHeader: true);
-        DisconnectDontHaveFriendCodeOption = Create(100901, true, CustomOptionType.Generic, ModHelpers.GetCs(roomSetting, "DisconnectDontHaveFriendCode"), true, null);
+        DisconnectNotPCOption = Create(100900, true, CustomOptionType.Generic, GetCsWithTranslation(roomSetting, "DisconnectNotPC"), true, null, isHeader: true);
+        DisconnectDontHaveFriendCodeOption = Create(100901, true, CustomOptionType.Generic, GetCsWithTranslation(roomSetting, "DisconnectDontHaveFriendCode"), true, null);
 
-        SNRWebSendConditionHostDependency = Create(104901, true, CustomOptionType.Generic, ModHelpers.GetCs(roomSetting, "SNRWebTransmissionConditionHostDependency"), true, null, isHeader: true);
+        SNRWebSendConditionHostDependency = Create(104901, true, CustomOptionType.Generic, GetCsWithTranslation(roomSetting, "SNRWebTransmissionConditionHostDependency"), true, null, isHeader: true);
 
-        ProhibitModColor = Create(104600, false, CustomOptionType.Generic, ModHelpers.GetCs(roomSetting, "ProhibitModColor"), false, null, isHeader: true);
+        ProhibitModColor = Create(104600, false, CustomOptionType.Generic, GetCsWithTranslation(roomSetting, "ProhibitModColor"), false, null, isHeader: true);
 
         enableAgartha = Create(101000, false, CustomOptionType.Generic, "AgarthaName", true, null, isHeader: true);
 
-        GMOption = Create(101100, false, CustomOptionType.Generic, ModHelpers.GetCs(RoleClass.GM.color, "GMName"), false, isHeader: true);
-        if (ConfigRoles.DebugMode.Value) { DebuggerOption = Create(101101, false, CustomOptionType.Generic, ModHelpers.GetCs(RoleClass.Debugger.color, "DebuggerName"), false); }
+        GMOption = Create(101100, false, CustomOptionType.Generic, GetCsWithTranslation(RoleClass.GM.color, "GMName"), false, isHeader: true);
+        if (ConfigRoles.DebugMode.Value) { DebuggerOption = Create(101101, false, CustomOptionType.Generic, GetCsWithTranslation(RoleClass.Debugger.color, "DebuggerName"), false); }
 
         /* |: ========================= Mod Normal Settings ========================== :| */
 
@@ -1556,7 +1561,7 @@ public class CustomOptionHolder
         RemoteSheriffQuarreledKill = Create(400111, true, CustomOptionType.Crewmate, "SheriffIsKillQuarreledSetting", false, RemoteSheriffOption);
 
         MeetingSheriffOption = SetupCustomRoleOption(400201, false, RoleId.MeetingSheriff);
-        MeetingSheriffPlayerCount = Create(400202, false, CustomOptionType.Crewmate, ModHelpers.GetCs(Color.white, "SettingPlayerCountName"), CrewPlayers[0], CrewPlayers[1], CrewPlayers[2], CrewPlayers[3], MeetingSheriffOption);
+        MeetingSheriffPlayerCount = Create(400202, false, CustomOptionType.Crewmate, GetCsWithTranslation(Color.white, "SettingPlayerCountName"), CrewPlayers[0], CrewPlayers[1], CrewPlayers[2], CrewPlayers[3], MeetingSheriffOption);
         MeetingSheriffKillMaxCount = Create(400203, false, CustomOptionType.Crewmate, "MeetingSheriffMaxKillCountSetting", 1f, 1f, 20f, 1f, MeetingSheriffOption, format: "unitSeconds");
         MeetingSheriffOneMeetingMultiKill = Create(400204, false, CustomOptionType.Crewmate, "MeetingSheriffMeetingmultipleKillSetting", false, MeetingSheriffOption);
         MeetingSheriffExecutionMode = Create(400211, true, CustomOptionType.Crewmate, "SheriffExecutionMode", new string[] { "SheriffDefaultExecutionMode", "SheriffAlwaysSuicideMode", "SheriffAlwaysKillMode" }, MeetingSheriffOption);
@@ -1940,7 +1945,7 @@ public class CustomOptionHolder
 
         HauntedWolf.CustomOptionData.SetUpCustomRoleOptions();
 
-        LoversOption = Create(500200, true, CustomOptionType.Modifier, ModHelpers.GetCs(RoleClass.Lovers.color, "LoversName"), false, null, isHeader: true);
+        LoversOption = Create(500200, true, CustomOptionType.Modifier, GetCsWithTranslation(RoleClass.Lovers.color, "LoversName"), false, null, isHeader: true);
         LoversTeamCount = Create(500201, true, CustomOptionType.Modifier, "LoversTeamCountSetting", QuarreledPlayers[0], QuarreledPlayers[1], QuarreledPlayers[2], QuarreledPlayers[3], LoversOption);
         LoversPar = Create(500202, true, CustomOptionType.Modifier, "LoversParSetting", rates, LoversOption);
         LoversOnlyCrewmate = Create(500203, true, CustomOptionType.Modifier, "LoversOnlyCrewmateSetting", false, LoversOption);
@@ -1954,7 +1959,7 @@ public class CustomOptionHolder
         LoversShortTask = loversoption.Item2;
         LoversLongTask = loversoption.Item3;
 
-        QuarreledOption = Create(500100, true, CustomOptionType.Modifier, ModHelpers.GetCs(RoleClass.Quarreled.color, "QuarreledName"), false, null, isHeader: true);
+        QuarreledOption = Create(500100, true, CustomOptionType.Modifier, GetCsWithTranslation(RoleClass.Quarreled.color, "QuarreledName"), false, null, isHeader: true);
         QuarreledTeamCount = Create(500101, true, CustomOptionType.Modifier, "QuarreledTeamCountSetting", QuarreledPlayers[0], QuarreledPlayers[1], QuarreledPlayers[2], QuarreledPlayers[3], QuarreledOption);
         QuarreledOnlyCrewmate = Create(500102, true, CustomOptionType.Modifier, "QuarreledOnlyCrewmateSetting", false, QuarreledOption);
 

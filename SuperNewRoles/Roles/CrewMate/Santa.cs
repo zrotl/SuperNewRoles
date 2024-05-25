@@ -60,16 +60,16 @@ public class Santa : RoleBase, ICrewmate, ICustomButton, IRpcHandler
                 ModTranslation.GetString(
                     "SantaTryRoleToDeath"
                 ),
-                ModHelpers.GetCs(RoleClass.Lovers.color, "LoversName")
+                CustomOptionHolder.GetCsWithTranslation(RoleClass.Lovers.color, "LoversName")
         ), false, Optioninfo.RoleOption);
         TryMadFriendsToDeath = CustomOption.Create(Optioninfo.OptionId++, false, Optioninfo.RoleOption.type,
             string.Format(
                 ModTranslation.GetString(
                     "SantaTryRoleToDeath"
                 ),
-                ModHelpers.GetCs(RoleClass.Lovers.color, "MadmateName") +
+                CustomOptionHolder.GetCsWithTranslation(RoleClass.Lovers.color, "MadmateName") +
                 ModTranslation.GetString("SantaAnd") +
-                ModHelpers.GetCs(RoleClass.Lovers.color, "JackalFriendsName")
+                CustomOptionHolder.GetCsWithTranslation(RoleClass.Lovers.color, "JackalFriendsName")
         ), false, Optioninfo.RoleOption);
         PresetRoleOptions = new CustomOption[PresetRolesParam.Length];
         for (int i = 0; i < PresetRolesParam.Length; i++)

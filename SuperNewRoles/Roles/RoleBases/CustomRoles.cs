@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using HarmonyLib;
 using SuperNewRoles.Mode;
+using SuperNewRoles.Modules;
 using SuperNewRoles.Roles.Role;
 using SuperNewRoles.Roles.RoleBases.Interfaces;
 using UnityEngine;
@@ -200,11 +201,11 @@ public static class CustomRoles
     {
         RoleInfo roleInfo = RoleInfoManager.GetRoleInfo(role);
         if (roleInfo != null)
-            return ModHelpers.GetCs(roleInfo.RoleColor, $"{roleInfo.NameKey}Name");
+            return CustomOptionHolder.GetCsWithTranslation(roleInfo.RoleColor, $"{roleInfo.NameKey}Name");
         IntroData intro = IntroData.GetIntrodata(role, player, IsImpostorReturn);
         if (intro == null)
             return null;
-        return ModHelpers.GetCs(intro.color, $"{intro?.NameKey}Name");
+        return CustomOptionHolder.GetCsWithTranslation(intro.color, $"{intro?.NameKey}Name");
     }
     public static TeamRoleType GetRoleTeam(PlayerControl player, bool IsImpostorReturn = false)
     {

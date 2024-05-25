@@ -55,19 +55,19 @@ public static class Debugger
         });
 
     // 役職
-    public static DebugPanel Crewmate = new(ModHelpers.GetCs(Palette.CrewmateBlue, "Crewmate"), DebugTabs.Always, true,
+    public static DebugPanel Crewmate = new(CustomOptionHolder.GetCsWithTranslation(Palette.CrewmateBlue, "Crewmate"), DebugTabs.Always, true,
         () =>
         {
             currentTab = DebugTabs.SetRole_Crewmate;
             ReShowPanels();
         }, TabType.Role);
-    public static DebugPanel Impostor = new(ModHelpers.GetCs(Palette.ImpostorRed, "Impostor"), DebugTabs.Always, true,
+    public static DebugPanel Impostor = new(CustomOptionHolder.GetCsWithTranslations(Palette.ImpostorRed, "Impostor"), DebugTabs.Always, true,
         () =>
         {
             currentTab = DebugTabs.SetRole_Impostor;
             ReShowPanels();
         }, TabType.Role);
-    public static DebugPanel Neutral = new(ModHelpers.GetCs(Palette.DisabledGrey, "Neutral"), DebugTabs.Always, true,
+    public static DebugPanel Neutral = new(CustomOptionHolder.GetCsWithTranslation(Palette.DisabledGrey, "Neutral"), DebugTabs.Always, true,
         () =>
         {
             currentTab = DebugTabs.SetRole_Neutral;
@@ -395,7 +395,7 @@ public static class Debugger
             panel.ColorBlindName.gameObject.SetActive(false);
             // panel.transform.FindChild("Nameplate").GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
             panel.transform.FindChild("Nameplate/Highlight/ShapeshifterIcon").gameObject.SetActive(false);
-            panel.NameText.text = ModHelpers.GetCs(roleInfo.color, ModTranslation.GetString(roleInfo.Name));
+            panel.NameText.text = CustomOptionHolder.GetCsWithTranslation(roleInfo.color, roleInfo.Name);
             panel.NameText.transform.localPosition = new(0, 0, -0.1f);
             index++;
         }

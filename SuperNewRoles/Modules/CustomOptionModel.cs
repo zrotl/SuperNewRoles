@@ -452,7 +452,7 @@ public class CustomRoleOption : CustomOption
     }
 
     public CustomRoleOption(int id, bool isSHROn, CustomOptionType type, string name, Color color, int max = 15, bool isHidden = false, RoleId? role = null) :
-        base(id, isSHROn, type, ModHelpers.GetCs(color, name), CustomOptionHolder.rates, "", null, true, false, "", roleId: role)
+        base(id, isSHROn, type, CustomOptionHolder.GetCsWithTranslation(color, name), CustomOptionHolder.rates, "", null, true, false, "", roleId: role)
     {
         if (!role.HasValue)
         {
@@ -1315,42 +1315,42 @@ class GameOptionsDataPatch
                 OptionToString(CustomOptionHolder.presetSelection)
             };
 
-        var optionName = ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingCrewmateRoles"));
+        var optionName = CustomOptionHolder.GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingCrewmateRoles"));
         var min = CustomOptionHolder.crewmateRolesCountMax.GetSelection();
         var max = CustomOptionHolder.crewmateRolesCountMax.GetSelection();
         if (min > max) min = max;
         var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
         entry.AppendLine($"{optionName}: {optionValue}");
 
-        optionName = ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingCrewmateGhostRoles"));
+        optionName = CustomOptionHolder.GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingCrewmateGhostRoles"));
         min = CustomOptionHolder.crewmateGhostRolesCountMax.GetSelection();
         max = CustomOptionHolder.crewmateGhostRolesCountMax.GetSelection();
         if (min > max) min = max;
         optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
         entry.AppendLine($"{optionName}: {optionValue}");
 
-        optionName = ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingNeutralRoles"));
+        optionName = CustomOptionHolder.GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingNeutralRoles"));
         min = CustomOptionHolder.neutralRolesCountMax.GetSelection();
         max = CustomOptionHolder.neutralRolesCountMax.GetSelection();
         if (min > max) min = max;
         optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
         entry.AppendLine($"{optionName}: {optionValue}");
 
-        optionName = ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingNeutralGhostRoles"));
+        optionName = CustomOptionHolder.GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingNeutralGhostRoles"));
         min = CustomOptionHolder.neutralGhostRolesCountMax.GetSelection();
         max = CustomOptionHolder.neutralGhostRolesCountMax.GetSelection();
         if (min > max) min = max;
         optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
         entry.AppendLine($"{optionName}: {optionValue}");
 
-        optionName = ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingImpostorRoles"));
+        optionName = CustomOptionHolder.GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingImpostorRoles"));
         min = CustomOptionHolder.impostorRolesCountMax.GetSelection();
         max = CustomOptionHolder.impostorRolesCountMax.GetSelection();
         if (min > max) min = max;
         optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
         entry.AppendLine($"{optionName}: {optionValue}");
 
-        optionName = ModHelpers.GetCs(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingImpostorGhostRoles"));
+        optionName = CustomOptionHolder.GetCsWithTranslation(new Color(204f / 255f, 204f / 255f, 0, 1f), Tl("SettingImpostorGhostRoles"));
         min = CustomOptionHolder.impostorGhostRolesCountMax.GetSelection();
         max = CustomOptionHolder.impostorGhostRolesCountMax.GetSelection();
         if (min > max) min = max;

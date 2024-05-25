@@ -273,7 +273,7 @@ class Guesser
             int col = i[(int)team] % 5;
             buttonParent.localPosition = new Vector3(-3.47f + 1.75f * col, 1.5f - 0.45f * row, -200f);
             buttonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
-            label.text = ModHelpers.GetCs(color, NameKey, "Name");
+            label.text = CustomOptionHolder.GetCsWithTranslation(color, NameKey + "Name");
             label.alignment = TMPro.TextAlignmentOptions.Center;
             label.transform.localPosition = new Vector3(0, 0, label.transform.localPosition.z);
             label.transform.localScale *= 1.6f;

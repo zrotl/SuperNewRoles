@@ -406,7 +406,7 @@ internal static class GetChatCommands
                 }
                 else // mode は 通常の方法で設定の文章を取得できない為, 個別で編集。 通常モード時出ない時は mode でなく ModeSetting で設定の文章を取得
                 {
-                    optionStr = $"{ModHelpers.GetCs(new Color(252f / 187f, 200f / 255f, 0, 1f), "ModeSetting")}:{ModTranslation.GetString("optionOff")}";
+                    optionStr = $"{CustomOptionHolder.GetCsWithTranslation(new Color(252f / 187f, 200f / 255f, 0, 1f), "ModeSetting")}:{ModTranslation.GetString("optionOff")}";
                     editing.AppendLine($"<size=80%>{optionStr}</size>");
 
                     // mode が off なら子設定が必要ない為, addChildren を呼ばない。
@@ -735,11 +735,7 @@ internal static class RoleinformationText
                         roleName = $"<align={"left"}><size=180%>{CustomRoles.GetRoleNameOnColor(roleOption.RoleId)}</size></align></size>";
 
                         optionBuilder.AppendLine($"<align={"left"}><size=80%>\n" + GetTeamText(CustomRoles.GetRoleTeamType(roleOption.RoleId)) + "\n</size>");
-
-                        //optionBuilder.AppendLine($"<size=100%>「{ModHelpers.GetCs(CustomRoles.GetRoleColor(roleOption.RoleId), CustomRoles.GetRoleIntro(roleOption.RoleId))}」</size>\n");
-                        optionBuilder.Append("<size=100%>「");
-                        ModHelpers.AppendCs(optionBuilder, CustomRoles.GetRoleColor(roleOption.RoleId), CustomRoles.GetRoleIntro(roleOption.RoleId));
-                        optionBuilder.AppendLine("」</size>\n");
+                        optionBuilder.AppendLine($"<size=100%>「{CustomOptionHolder.GetCsWithTranslation(CustomRoles.GetRoleColor(roleOption.RoleId), CustomRoles.GetRoleIntro(roleOption.RoleId))}」</size>\n");
                         optionBuilder.AppendLine($"<size=80%>{CustomRoles.GetRoleDescription(roleOption.RoleId)}\n</size>");
                         optionBuilder.AppendLine($"<size=70%>{ModTranslation.GetString("MessageSettings")}:");
                         optionBuilder.AppendLine($"{GetOptionText(roleOption)}\n<color=#00000000>{CustomRoles.GetRoleNameKey(roleOption.RoleId)}</color></align></size>");
@@ -769,14 +765,10 @@ internal static class RoleinformationText
                     teamType = TeamType.Crewmate;
                 }
 
-                roleName = $"<align={"left"}><size=180%>{ModHelpers.GetCs(color, teamName, "Name")}</size> <size=50%>\n{GetTeamText(teamType)}</align></size>";
+                roleName = $"<align={"left"}><size=180%>{CustomOptionHolder.GetCsWithTranslation(color, teamName + "Name")}</size> <size=50%>\n{GetTeamText(teamType)}</align></size>";
 
                 vanillaRoleBuilder.AppendLine("\n");
-
-                //vanillaRoleBuilder.AppendLine($"<align={"left"}><size=100%>「{ModHelpers.GetCs(color, teamName, "Title1")}」</size>\n");
-                vanillaRoleBuilder.Append("<align=\"left\"><size=100%>「");
-                ModHelpers.AppendCs(vanillaRoleBuilder, color, teamName, "Title1");
-                vanillaRoleBuilder.AppendLine("」</size>\n");
+                vanillaRoleBuilder.AppendLine($"<align={"left"}><size=100%>「{CustomOptionHolder.GetCsWithTranslation(color, teamName + "Title1")}」</size>\n");
                 vanillaRoleBuilder.AppendLine($"<size=80%>{ModTranslation.GetString(teamName + "Description")}</align></size>\n\n");
 
                 roleInfo = vanillaRoleBuilder.ToString();

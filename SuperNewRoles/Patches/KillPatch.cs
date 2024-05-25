@@ -470,7 +470,7 @@ static class CheckMurderPatch
             }, 0.5f, "RpcCheckExile Assassin Start Meeting");
             new LateTask(() =>
             {
-                __instance.RpcSetName($"<size=200%>{ModHelpers.GetCs(RoleClass.Marlin.color, IntroData.MarlinIntro.NameKey, "Name")}は誰だ？</size>");
+                __instance.RpcSetName($"<size=200%>{CustomOptionHolder.GetCsWithTranslation(RoleClass.Marlin.color, IntroData.MarlinIntro.NameKey + "Name")}は誰だ？</size>");
             }, 2f, "RpcCheckExile Who Marlin Name");
             new LateTask(() =>
             {
@@ -505,7 +505,7 @@ static class CheckMurderPatch
             }, 0.5f, "RpcMurderPlayerCheck Assassin Meeting");
             new LateTask(() =>
             {
-                target.RpcSetName($"<size=200%>{ModHelpers.GetCs(RoleClass.Marlin.color, IntroData.MarlinIntro.NameKey, "Name")}は誰だ？</size>");
+                target.RpcSetName($"<size=200%>{CustomOptionHolder.GetCsWithTranslation(RoleClass.Marlin.color, IntroData.MarlinIntro.NameKey + "Name")}は誰だ？</size>");
             }, 2f, "RpcMurderPlayerCheck Who Marlin Name");
             new LateTask(() =>
             {

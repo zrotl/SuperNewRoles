@@ -122,12 +122,11 @@ public class SetNamesClass
         catch { }
         //string playerInfoText = "";
         //string meetingInfoText = "";
-        StringBuilder playerInfoTextBuilder = new();
-        ModHelpers.AppendCs(playerInfoTextBuilder, roleColors, roleNames);
+        StringBuilder playerInfoTextBuilder = new(CustomOptionHolder.GetCsWithTranslation(roleColors, roleNames));
         if (GhostRoleNames != "")
         {
             playerInfoTextBuilder.Insert(0, "(");
-            playerInfoTextBuilder.Insert(0, ModHelpers.GetCs((Color)GhostRoleColor, GhostRoleNames));
+            playerInfoTextBuilder.Insert(0, CustomOptionHolder.GetCsWithTranslation((Color)GhostRoleColor, GhostRoleNames));
             playerInfoTextBuilder.Append(")");
         }
 

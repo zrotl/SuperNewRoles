@@ -696,7 +696,7 @@ public class CustomOverlays
             left += $"<size=200%>\n{CustomRoles.GetRoleNameOnColor(roleOption.RoleId)}</size> <size=95%>: {AddChatPatch.GetTeamText(CustomRoles.GetRoleTeamType(roleOption.RoleId))}</size>";
             option.AppendLine("\n");
 
-            option.AppendLine($"<size=125%>「{ModHelpers.GetCs(CustomRoles.GetRoleColor(roleOption.RoleId), CustomRoles.GetRoleIntro(roleOption.RoleId))}」</size>\n");
+            option.AppendLine($"<size=125%>「{CustomOptionHolder.GetCsWithTranslation(CustomRoles.GetRoleColor(roleOption.RoleId), CustomRoles.GetRoleIntro(roleOption.RoleId))}」</size>\n");
             option.AppendLine($"<size=95%>{CustomRoles.GetRoleDescription(roleOption.RoleId)}\n</size>");
             option.AppendLine($"<size=125%>{ModTranslation.GetString("MessageSettings")}:");
             option.AppendLine($"{AddChatPatch.GetOptionText(roleOption)}</size>");
@@ -724,11 +724,11 @@ public class CustomOverlays
             teamType = TeamType.Crewmate;
         }
 
-        left = $"<size=200%>\n{ModHelpers.GetCs(color, roleName, "Name")}</size> <size=95%>: {AddChatPatch.GetTeamText(teamType)}</size>";
+        left = $"<size=200%>\n{CustomOptionHolder.GetCsWithTranslation(color, roleName + "Name")}</size> <size=95%>: {AddChatPatch.GetTeamText(teamType)}</size>";
 
         option.AppendLine("\n");
 
-        option.AppendLine($"<size=200%>「{ModHelpers.GetCs(color, roleName, "Title1")}」</size>\n");
+        option.AppendLine($"<size=200%>「{CustomOptionHolder.GetCsWithTranslation(color, roleName + "Title1")}」</size>\n");
         option.AppendLine($"<size=150%>{ModTranslation.GetString(roleName + "Description")}\n</size>");
 
         center = option.ToString();
