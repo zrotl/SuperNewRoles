@@ -61,7 +61,7 @@ public static class Debugger
             currentTab = DebugTabs.SetRole_Crewmate;
             ReShowPanels();
         }, TabType.Role);
-    public static DebugPanel Impostor = new(CustomOptionHolder.GetCsWithTranslations(Palette.ImpostorRed, "Impostor"), DebugTabs.Always, true,
+    public static DebugPanel Impostor = new(CustomOptionHolder.GetCsWithTranslation(Palette.ImpostorRed, "Impostor"), DebugTabs.Always, true,
         () =>
         {
             currentTab = DebugTabs.SetRole_Impostor;
@@ -395,7 +395,7 @@ public static class Debugger
             panel.ColorBlindName.gameObject.SetActive(false);
             // panel.transform.FindChild("Nameplate").GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
             panel.transform.FindChild("Nameplate/Highlight/ShapeshifterIcon").gameObject.SetActive(false);
-            panel.NameText.text = CustomOptionHolder.GetCsWithTranslation(roleInfo.color, roleInfo.Name);
+            panel.NameText.text = CustomOptionHolder.GetCsWithTranslation(roleInfo.color, ModTranslation.GetString(roleInfo.Name));
             panel.NameText.transform.localPosition = new(0, 0, -0.1f);
             index++;
         }

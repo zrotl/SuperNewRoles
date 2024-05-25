@@ -957,7 +957,7 @@ public class CustomOptionHolder
 
     public static string GetCsWithTranslation(Color c, string s)
     {
-        return ModHelpers.GetCs(c, s);
+        return ModHelpers.GetCs(c, ModTranslation.GetString(s));
     }
 
     public static byte ToByte(float f)
