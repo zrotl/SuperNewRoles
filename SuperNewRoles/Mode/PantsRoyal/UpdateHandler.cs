@@ -104,8 +104,8 @@ public static class UpdateHandler
         }
         if (main.ShowRoleTime <= 0)
         {
-            string RoleNameText = ModHelpers.Cs(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
-            string TaskText = ModHelpers.Cs(Color.yellow, "(334/802)");
+            string RoleNameText = ModHelpers.GetCs(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
+            string TaskText = ModHelpers.GetCs(Color.yellow, "(334/802)");
             foreach (PlayerControl p in CachedPlayer.AllPlayers)
             {
                 CopsRobbers.Main.ClearAndReloads();
@@ -138,8 +138,8 @@ public static class UpdateHandler
             main.CurrentTurnData.EndTurn();
         else
         {
-            string RoleNameText = ModHelpers.Cs(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
-            string TaskText = ModHelpers.Cs(Color.yellow, "(334/802)");
+            string RoleNameText = ModHelpers.GetCs(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
+            string TaskText = ModHelpers.GetCs(Color.yellow, "(334/802)");
             if (main.CurrentTurnData.TurnTimer <= 10)
             {
                 if (main.CurrentTurnData.LastUpdateCountdownTime >= 1)
@@ -149,7 +149,7 @@ public static class UpdateHandler
                     if (main.CurrentTurnData.TurnTimer != time)
                         time++;
                     string timetext = string.Format(ModTranslation.GetString("PantsRoyalTimeRemainingText"), time);
-                    string prefix = "<size=125%>" + ModHelpers.Cs(IntroData.CrewmateIntro.color, timetext) + "</size>\n<size=75%>" + RoleNameText + TaskText + "</size>\n";
+                    string prefix = "<size=125%>" + ModHelpers.GetCs(IntroData.CrewmateIntro.color, timetext) + "</size>\n<size=75%>" + RoleNameText + TaskText + "</size>\n";
                     foreach (PlayerControl p in PlayerControl.AllPlayerControls)
                     {
                         string nametext = prefix + p.GetDefaultName() + "\n\n";
@@ -176,7 +176,7 @@ public static class UpdateHandler
                 if (main.CurrentTurnData.TurnTimer != time)
                     time++;
                 string timetext = string.Format(ModTranslation.GetString("PantsRoyalTimeRemainingText"), time);
-                string prefix = "<size=125%>" + ModHelpers.Cs(IntroData.CrewmateIntro.color, timetext) + "</size>\n<size=75%>" + RoleNameText + TaskText + "</size>\n";
+                string prefix = "<size=125%>" + ModHelpers.GetCs(IntroData.CrewmateIntro.color, timetext) + "</size>\n<size=75%>" + RoleNameText + TaskText + "</size>\n";
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls)
                 {
                     string nametext = prefix + p.GetDefaultName() + "\n\n";
@@ -248,8 +248,8 @@ public static class UpdateHandler
         }
         if (main.CurrentTurnData.StartTimer <= 0)
         {
-            string RoleNameText = ModHelpers.Cs(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
-            string TaskText = ModHelpers.Cs(Color.yellow, "(334/802)");
+            string RoleNameText = ModHelpers.GetCs(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
+            string TaskText = ModHelpers.GetCs(Color.yellow, "(334/802)");
             foreach (PlayerControl p in CachedPlayer.AllPlayers)
             {
                 p.RpcSetName("<size=75%>" + RoleNameText + TaskText + "</size>\n" + p.GetDefaultName());

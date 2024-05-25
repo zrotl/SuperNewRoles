@@ -49,7 +49,7 @@ class PlusGameOptions
 
     public static void Load()
     {
-        PlusGameOptionSetting = Create(103500, true, CustomOptionType.Generic, Cs(new Color(168f / 187f, 191f / 255f, 147f / 255f, 1f), "PlusGameOptionSetting"), false, null, isHeader: true);
+        PlusGameOptionSetting = Create(103500, true, CustomOptionType.Generic, ModHelpers.GetCs(new Color(168f / 187f, 191f / 255f, 147f / 255f, 1f), "PlusGameOptionSetting"), false, null, isHeader: true);
 
         CanNotGhostSeeRole = Create(103600, true, CustomOptionType.Generic, "CanNotGhostSeeRole", false, PlusGameOptionSetting, isHeader: true);
         OnlyImpostorGhostSeeRole = Create(103601, true, CustomOptionType.Generic, "OnlyImpostorGhostSeeRole", false, CanNotGhostSeeRole);
@@ -71,7 +71,7 @@ class PlusGameOptions
         EmergencyMeetingLimitCount = Create(105302, true, CustomOptionType.Generic, "EmergencyMeetingLimitCount", 10, 0, 20, 1, IsLimitEmergencyMeeting);
         NotUseReportDeadBody = Create(105303, true, CustomOptionType.Generic, "NotUseReportSetting", false, ReportDeadBodySetting);
 
-        ZoomOption = Create(104200, false, CustomOptionType.Generic, Cs(Color.white, "Zoomafterdeath"), true, PlusGameOptionSetting, isHeader: true);
+        ZoomOption = Create(104200, false, CustomOptionType.Generic, ModHelpers.GetCs(Color.white, "Zoomafterdeath"), true, PlusGameOptionSetting, isHeader: true);
         MouseZoom = Create(104201, false, CustomOptionType.Generic, "mousemode", false, ZoomOption);
         ClairvoyantZoom = Create(104202, false, CustomOptionType.Generic, "clairvoyantmode", false, ZoomOption);
         ZoomCoolTime = Create(104203, false, CustomOptionType.Generic, "clairvoyantCoolTime", 15f, 0f, 60f, 2.5f, ClairvoyantZoom, format: "unitCouples");

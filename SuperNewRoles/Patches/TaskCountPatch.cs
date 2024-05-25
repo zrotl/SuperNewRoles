@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using AmongUs.GameOptions;
 using HarmonyLib;
 using SuperNewRoles.MapOption;
 using SuperNewRoles.Mode;
+using UnityEngine;
 
 namespace SuperNewRoles.Patches;
 
@@ -160,5 +162,26 @@ class TaskCount
             bool isRelease = Roles.HandleGhostRole.AssignRole.GetReleaseHauntAbility(player);
             if (isRelease) player.RpcSetRole(RoleTypes.CrewmateGhost); // タスクが完了していたらクルーメイトゴーストに変更し, 憑依能力を開放する。
         }
+    }
+
+    public static StringBuilder GetTaskCountText(GameData.PlayerInfo playerInfo, bool commsActive)
+    {
+        StringBuilder TaskText = new();
+        var (Complete, all) = TaskDateNoClearCheck(playerInfo);
+        try
+        {
+            if (commsActive)
+            {
+                TaskText.Append($"(?/{all})");
+                ModHelpers.ColorSB(TaskText, Color.yellow);
+            }
+            else
+            {
+                TaskText.Append($"({Complete}/{all})");
+                ModHelpers.ColorSB(TaskText, Color.yellow);
+            }
+        }
+        catch { }
+        return TaskText;
     }
 }

@@ -248,7 +248,7 @@ public static class Sauner
         }
         Color color = GetFlashColor(RoleData.CurrentState);
         color.a = 1f;
-        RoleData.TaskText.Text = "<size=0%>Sauner</size>" + ModHelpers.Cs(color, $"{ModTranslation.GetString($"Sauner{RoleData.CurrentState}")}: {GetSaunaText()}");
+        RoleData.TaskText.Text = "<size=0%>Sauner</size>" + ModHelpers.GetCs(color, $"{ModTranslation.GetString($"Sauner{RoleData.CurrentState}")}: {GetSaunaText()}");
         int index = 0;
         foreach (PlayerTask t in PlayerControl.LocalPlayer.myTasks)
         {

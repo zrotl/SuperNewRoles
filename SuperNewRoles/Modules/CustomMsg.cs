@@ -49,8 +49,8 @@ public class CustomMessage
                     secondColor = secondColor == default ? firstColor : secondColor;
 
                     text.text = even
-                        ? ModHelpers.Cs(firstColor, message)
-                        : ModHelpers.Cs(secondColor, message);
+                        ? ModHelpers.GetCs(firstColor, message)
+                        : ModHelpers.GetCs(secondColor, message);
 
                     if (text != null)
                         text.color = even ? firstColor : secondColor;

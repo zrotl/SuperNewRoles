@@ -200,11 +200,11 @@ public static class CustomRoles
     {
         RoleInfo roleInfo = RoleInfoManager.GetRoleInfo(role);
         if (roleInfo != null)
-            return CustomOptionHolder.Cs(roleInfo.RoleColor, $"{roleInfo.NameKey}Name");
+            return ModHelpers.GetCs(roleInfo.RoleColor, $"{roleInfo.NameKey}Name");
         IntroData intro = IntroData.GetIntrodata(role, player, IsImpostorReturn);
         if (intro == null)
             return null;
-        return CustomOptionHolder.Cs(intro.color, $"{intro?.NameKey}Name");
+        return ModHelpers.GetCs(intro.color, $"{intro?.NameKey}Name");
     }
     public static TeamRoleType GetRoleTeam(PlayerControl player, bool IsImpostorReturn = false)
     {

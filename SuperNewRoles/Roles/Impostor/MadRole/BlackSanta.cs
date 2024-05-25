@@ -73,7 +73,7 @@ public class BlackSanta : RoleBase, IMadmate, ICustomButton, IRpcHandler
                 ModTranslation.GetString(
                     "SantaTryRoleToDeath"
                 ),
-                CustomOptionHolder.Cs(RoleClass.Lovers.color, "LoversName")
+                ModHelpers.GetCs(RoleClass.Lovers.color, "LoversName")
         ), false, Optioninfo.RoleOption);
         PresetRoleOptions = new CustomOption[PresetRolesParam.Length];
         for (int i = 0; i < PresetRolesParam.Length; i++)

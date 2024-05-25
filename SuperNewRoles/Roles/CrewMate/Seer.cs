@@ -237,7 +237,7 @@ class SeerHandler
                                 if (evilSeer.IsClearColor) // 彩光が最高
                                 {
                                     flashColor = Palette.PlayerColors[bodyColorId];
-                                    var crewColorText = $"[ <color=#89c3eb>{OutfitManager.GetColorTranslation(Palette.ColorNames[bodyColorId])}</color> : {ModHelpers.Cs(flashColor, "■")} ]";
+                                    var crewColorText = $"[ <color=#89c3eb>{OutfitManager.GetColorTranslation(Palette.ColorNames[bodyColorId])}</color> : {ModHelpers.GetCs(flashColor, "■")} ]";
                                     showtext = string.Format(ModTranslation.GetString("EvilSeerClearColorDeadText"), crewColorText);
                                 }
                                 else // 明暗

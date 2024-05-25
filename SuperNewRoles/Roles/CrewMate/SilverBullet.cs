@@ -162,8 +162,8 @@ public class SilverBullet : RoleBase, ICrewmate, ISupportSHR, ICustomButton, IRp
     {
         if (WillSendChat.Count <= 0)
             return;
-        string BaseText = ModHelpers.Cs(Roleinfo.RoleColor, TextLine + "\n" +
-            $"|{ModTranslation.GetString(Roleinfo.NameKey + "Name")}|\n" +
+        string BaseText = ModHelpers.GetCs(Roleinfo.RoleColor, TextLine, "\n",
+            "|", ModTranslation.GetString(Roleinfo.NameKey + "Name"), "|\n", 
             TextLine) + "\n\n";
         foreach (int ventId in WillSendChat)
         {
@@ -251,9 +251,9 @@ public class SilverBullet : RoleBase, ICrewmate, ISupportSHR, ICustomButton, IRp
     }
     void ISupportSHR.BuildName(StringBuilder Suffix, StringBuilder RoleNameText, PlayerData<string> ChangePlayers)
     {
-        RoleNameText.Append(ModHelpers.Cs(Roleinfo.RoleColor, $"({AnalysisCount})"));
+        RoleNameText.Append(ModHelpers.GetCs(Roleinfo.RoleColor, "(", AnalysisCount.ToString(), ")"));
         if (CanUseRepairOption.GetBool()) {
-            RoleNameText.Append(ModHelpers.Cs(RoleClass.ImpostorRed, $"({CanRepairCount})"));
+            RoleNameText.Append(ModHelpers.GetCs(RoleClass.ImpostorRed, "(", CanRepairCount.ToString(), ")"));
         }
     }
 }

@@ -126,7 +126,7 @@ public class MedicalTechnologist : RoleBase, ICrewmate, ISupportSHR, ICustomButt
     public RoleTypes DesyncRole => RoleTypes.Impostor;
     public void BuildName(StringBuilder Suffix, StringBuilder RoleNameText, PlayerData<string> ChangePlayers)
     {
-        ChangePlayers[this.Player.PlayerId] = ModHelpers.Cs(Roleinfo.RoleColor, $"<size=80%>{MtButtonCountString()}</size>\n{RoleNameText}\n{ChangeName.GetNowName(ChangePlayers, this.Player)}");
+        ChangePlayers[this.Player.PlayerId] = ModHelpers.GetCs(Roleinfo.RoleColor, "<size=80%>", MtButtonCountString(), "</size>\n", RoleNameText.ToString(), "\n", ChangeName.GetNowName(ChangePlayers, this.Player));
 
         if (SampleCrews.FirstCrew != byte.MaxValue)
         {

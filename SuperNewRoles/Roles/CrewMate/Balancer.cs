@@ -679,9 +679,9 @@ public static class Balancer
             string targetText2 = $"{Palette.GetColorName(targetplayerright.Data.DefaultOutfit.ColorId)} {targetplayerright.name}";
 
             //string dispText = $"バランスを求めよ。\n\n" +
-            string dispText = ModHelpers.Cs(Palette.PlayerColors[targetplayerleft.Data.DefaultOutfit.ColorId], targetText1) +
+            string dispText = ModHelpers.GetCs(Palette.PlayerColors[targetplayerleft.Data.DefaultOutfit.ColorId], targetText1) +
                                "\n<color=#ffffff>   vs </color>\n" +
-                              ModHelpers.Cs(Palette.PlayerColors[targetplayerright.Data.DefaultOutfit.ColorId], targetText2);
+                              ModHelpers.GetCs(Palette.PlayerColors[targetplayerright.Data.DefaultOutfit.ColorId], targetText2);
 
             dispText = $"<size=100%>{dispText}</size>";
             dispText = $"{decoration}\n{dispText}\n";

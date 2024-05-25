@@ -99,10 +99,9 @@ public class Cupid : RoleBase, INeutral, IFixedUpdaterAll, IFixedUpdaterMe, ISup
     {
         if (currentPair == null || !Created) return;
 
-        var suffix = ModHelpers.Cs(RoleClass.Lovers.color, " ♥");
         PlayerControl Side = currentPair.GetOneSideLovers();
-        ChangePlayers[currentPair.PlayerId] = ChangeName.GetNowName(ChangePlayers, currentPair) + suffix;
-        ChangePlayers[Side.PlayerId] = ChangeName.GetNowName(ChangePlayers, Side) + suffix;
+        ChangePlayers[currentPair.PlayerId] = ChangeName.GetNowName(ChangePlayers, currentPair) + SetNamesClass.LoversSuffix;
+        ChangePlayers[Side.PlayerId] = ChangeName.GetNowName(ChangePlayers, Side) + SetNamesClass.LoversSuffix;
     }
     public void BuildSetting(IGameOptions gameOptions)
     {
@@ -139,11 +138,10 @@ public class Cupid : RoleBase, INeutral, IFixedUpdaterAll, IFixedUpdaterMe, ISup
     {
         if (Created && currentPair != null)
         {
-            string suffix = ModHelpers.Cs(RoleClass.Lovers.color, " ♥");
             PlayerControl side = currentPair.GetOneSideLovers();
-            SetNamesClass.SetPlayerNameText(currentPair, $"{currentPair.NameText().text}{suffix}");
+            SetNamesClass.SetPlayerNameText(currentPair, $"{currentPair.NameText().text}{SetNamesClass.LoversSuffix}");
             if (!side.Data.Disconnected)
-                SetNamesClass.SetPlayerNameText(side, $"{side.NameText().text}{suffix}");
+                SetNamesClass.SetPlayerNameText(side, $"{side.NameText().text}{SetNamesClass.LoversSuffix}");
         }
     }
     private List<PlayerControl> GetUntargetPlayers()

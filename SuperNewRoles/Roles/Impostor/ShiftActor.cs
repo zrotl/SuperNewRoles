@@ -91,16 +91,16 @@ public static class ShiftActor
             {
                 if (target.IsLovers())
                 {
-                    TargetRoleText += ModHelpers.Cs(RoleClass.Lovers.color, " ♥"); // ラバーズ
+                    TargetRoleText += SetNamesClass.LoversSuffix; // ラバーズ
                 }
                 else if (target.IsQuarreled())
                 {
-                    TargetRoleText += ModHelpers.Cs(Quarreled.color, "○"); //　クラード
+                    TargetRoleText += SetNamesClass.QuarreledSuffix; //　クラード
                 }
 
                 if (target.IsHauntedWolf())
                 {
-                    TargetRoleText += $" + {ModHelpers.Cs(Attribute.HauntedWolf.RoleData.color, ModTranslation.GetString("HauntedWolfName"))}";
+                    TargetRoleText += $" + {ModHelpers.GetCs(Attribute.HauntedWolf.RoleData.color, ModTranslation.GetString("HauntedWolfName"))}";
                 }
             }
         }

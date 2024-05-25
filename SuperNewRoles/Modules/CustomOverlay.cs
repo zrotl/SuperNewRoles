@@ -658,9 +658,9 @@ public class CustomOverlays
         if (DataManager.Settings.Gameplay.StreamerMode) friendCode = "**********#****"; // バニラ設定[配信者モード]が有効時フレンドコードを伏字風にする
 
         // プレイヤー名とクルーカラーを■で表記
-        data += $"<size=150%>{p.PlayerId + 1}. {p.name}{ModHelpers.Cs(Palette.PlayerColors[p.Data.DefaultOutfit.ColorId], "■")}</size>\n";
+        data += $"<size=150%>{p.PlayerId + 1}. {p.name}{ModHelpers.GetCs(Palette.PlayerColors[p.Data.DefaultOutfit.ColorId], "■")}</size>\n";
         // クルーカラーとカラー名を表記
-        data += $"<pos=10%>{ModHelpers.Cs(Palette.PlayerColors[p.Data.DefaultOutfit.ColorId], "■")} : {OutfitManager.GetColorTranslation(Palette.ColorNames[p.Data.DefaultOutfit.ColorId])}\n";
+        data += $"<pos=10%>{ModHelpers.GetCs(Palette.PlayerColors[p.Data.DefaultOutfit.ColorId], "■")} : {OutfitManager.GetColorTranslation(Palette.ColorNames[p.Data.DefaultOutfit.ColorId])}\n";
         data += $"<size=90%><pos=10%>{ModTranslation.GetString("SNRIntroduction")} : {(p.IsMod() ? "〇" : "×")}\n"; // Mod導入状態
         data += $"<pos=10%>FriendCode : {friendCode}\n"; // フレンドコード
         data += $"<pos=10%>Platform : {p.GetClient()?.PlatformData?.Platform}</size>\n"; // プラットフォーム
@@ -696,7 +696,7 @@ public class CustomOverlays
             left += $"<size=200%>\n{CustomRoles.GetRoleNameOnColor(roleOption.RoleId)}</size> <size=95%>: {AddChatPatch.GetTeamText(CustomRoles.GetRoleTeamType(roleOption.RoleId))}</size>";
             option.AppendLine("\n");
 
-            option.AppendLine($"<size=125%>「{CustomOptionHolder.Cs(CustomRoles.GetRoleColor(roleOption.RoleId), CustomRoles.GetRoleIntro(roleOption.RoleId))}」</size>\n");
+            option.AppendLine($"<size=125%>「{ModHelpers.GetCs(CustomRoles.GetRoleColor(roleOption.RoleId), CustomRoles.GetRoleIntro(roleOption.RoleId))}」</size>\n");
             option.AppendLine($"<size=95%>{CustomRoles.GetRoleDescription(roleOption.RoleId)}\n</size>");
             option.AppendLine($"<size=125%>{ModTranslation.GetString("MessageSettings")}:");
             option.AppendLine($"{AddChatPatch.GetOptionText(roleOption)}</size>");
@@ -724,11 +724,11 @@ public class CustomOverlays
             teamType = TeamType.Crewmate;
         }
 
-        left = $"<size=200%>\n{CustomOptionHolder.Cs(color, roleName + "Name")}</size> <size=95%>: {AddChatPatch.GetTeamText(teamType)}</size>";
+        left = $"<size=200%>\n{ModHelpers.GetCs(color, roleName, "Name")}</size> <size=95%>: {AddChatPatch.GetTeamText(teamType)}</size>";
 
         option.AppendLine("\n");
 
-        option.AppendLine($"<size=200%>「{CustomOptionHolder.Cs(color, roleName + "Title1")}」</size>\n");
+        option.AppendLine($"<size=200%>「{ModHelpers.GetCs(color, roleName, "Title1")}」</size>\n");
         option.AppendLine($"<size=150%>{ModTranslation.GetString(roleName + "Description")}\n</size>");
 
         center = option.ToString();

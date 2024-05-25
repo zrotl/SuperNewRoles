@@ -19,7 +19,7 @@ namespace SuperNewRoles.SuperNewRolesWeb
                 if (player == null) continue;
                 if (data.Value == "0") continue;
                 AddChatPatch.SendCommand(player, string.Format(ModTranslation.GetString("SNRWebBRMultiRate"), data.Value),
-                    ModHelpers.Cs(new Color32(116, 80, 48, byte.MaxValue), ModTranslation.GetString("BattleRoyalModeName") + "Web"));
+                    ModHelpers.GetCs(new Color32(116, 80, 48, byte.MaxValue), ModTranslation.GetString("BattleRoyalModeName"), "Web"));
             }
         }
         public static void StartGame()

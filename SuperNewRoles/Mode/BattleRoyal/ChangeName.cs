@@ -71,16 +71,21 @@ namespace SuperNewRoles.Mode.BattleRoyal
         }
         public static (string, string) GetName(PlayerControl player)
         {
-            string name = player.GetDefaultName();
-            name = "<size=75%>" + ModHelpers.Cs(CustomRoles.GetRoleColor(player.GetRole(), IsImpostorReturn: true), CustomRoles.GetRoleName(player.GetRole(), IsImpostorReturn: true)) + "</size>\n" + name + "\n\n";
-            string selfname = name;
-            selfname = "\n\n\n\n" + selfname + "\n\n\n\n";
+            StringBuilder builder = new("<size=75%>");
+            ModHelpers.AppendCs(builder, CustomRoles.GetRoleColor(player.GetRole(), IsImpostorReturn: true), CustomRoles.GetRoleName(player.GetRole(), IsImpostorReturn: true));
+            builder.Append("</size>\n").Append(player.GetDefaultName()).Append("\n\n");
+            String name = builder.ToString();
+
+            builder.Insert(0, "\n\n\n\n").Append("\n\n\n\n");
+            StringBuilder builder2 = new();
             foreach (var notifi in Notifications)
             {
                 Logger.Info("SETNOTIF:" + notifi.Item1);
-                selfname = "<size=200%>" + notifi.Item1 + "</size>" + selfname + "\n";
+                builder2 = new("<size=200%>");
+                builder2.Append(notifi.Item1).Append("</size>");
+                builder.Insert(0, builder2).Append("\n");
             }
-            return (name, selfname);
+            return (name, builder.ToString());
         }
     }
 }

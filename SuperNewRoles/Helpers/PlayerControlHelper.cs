@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using InnerNet;
 using SuperNewRoles.Roles;
 using SuperNewRoles.Roles.RoleBases;
@@ -81,23 +82,25 @@ public static class PlayerControlHelper
             // Add TextTask for remaining RoleInfos
             var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             task.transform.SetParent(player.transform, false);
-
-            task.Text = ModHelpers.Cs(CustomRoles.GetRoleColor(roleId), $"{CustomRoles.GetRoleName(roleId)}: {CustomRoles.GetRoleIntro(roleId)}");
+            StringBuilder builder = new();
+            
+            ModHelpers.AppendCs(builder, CustomRoles.GetRoleColor(roleId), $"{CustomRoles.GetRoleName(roleId)}: {CustomRoles.GetRoleIntro(roleId)}");
             if (player.IsLovers() || player.IsFakeLovers())
             {
-                task.Text += "\n" + ModHelpers.Cs(RoleClass.Lovers.color, ModTranslation.GetString("LoversName") + ": " + string.Format(ModTranslation.GetString("LoversIntro"), PlayerControl.LocalPlayer.GetOneSideLovers()?.Data?.PlayerName ?? ""));
+                builder.Append("\n");
+
+                StringBuilder builder2 = new(ModTranslation.GetString("LoversName"));
+                builder2.Append(": ");
+                builder2.AppendFormat(ModTranslation.GetString("LoversIntro"), PlayerControl.LocalPlayer.GetOneSideLovers()?.Data?.PlayerName ?? "");
+                ModHelpers.AppendCs(builder, RoleClass.Lovers.color, builder2);
             }
             if (!player.IsGhostRole(RoleId.DefaultRole))
             {
-                task.Text += "\n" + ModHelpers.Cs(
-                    CustomRoles.GetRoleColor(
-                        player.GetGhostRole()
-                        , player
-                    ),
-                    $"{CustomRoles.GetRoleName(player.GetGhostRole(),
-                    player)}: {CustomRoles.GetRoleIntro(player.GetGhostRole(), player)}");
+                builder.Append("\n");
+                ModHelpers.AppendCs(builder, CustomRoles.GetRoleColor(player.GetGhostRole(), player), CustomRoles.GetRoleName(player.GetGhostRole(), player), ": ", CustomRoles.GetRoleIntro(player.GetGhostRole(), player));
             }
 
+            task.Text = builder.ToString();
             player.myTasks.Insert(0, task);
         }
     }

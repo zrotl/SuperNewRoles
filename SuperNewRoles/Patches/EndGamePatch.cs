@@ -341,7 +341,7 @@ public class EndGameManagerSetUpPatch
                 if (!IsOpptexton && !haison)
                 {
                     IsOpptexton = true;
-                    text = text + "&" + ModHelpers.Cs(RoleClass.Opportunist.color, ModTranslation.GetString("OpportunistName"));
+                    text = text + "&" + ModHelpers.GetCs(RoleClass.Opportunist.color, ModTranslation.GetString("OpportunistName"));
                 }
             }
         }
@@ -363,7 +363,7 @@ public class EndGameManagerSetUpPatch
                         if (!IsLovetexton && !haison)
                         {
                             IsLovetexton = true;
-                            text = text + "&" + CustomOptionHolder.Cs(RoleClass.Lovers.color, "LoversName");
+                            text = text + "&" + ModHelpers.GetCs(RoleClass.Lovers.color, "LoversName");
                         }
                     }
                 }
@@ -417,12 +417,12 @@ public class EndGameManagerSetUpPatch
                     roleText += $" → {CustomRoles.GetRoleNameOnColor(data.GhostRoleId)}";
                 }
                 //位置調整:ExR参考  by 漢方
-                string result = $"{ModHelpers.Cs(Palette.PlayerColors[data.ColorId], data.PlayerName)}{data.NameSuffix}<pos=17%>{taskInfo} - <pos=27%>{FinalStatusPatch.GetStatusText(data.Status)} - {roleText}";
+                string result = $"{ModHelpers.GetCs(Palette.PlayerColors[data.ColorId], data.PlayerName)}{data.NameSuffix}<pos=17%>{taskInfo} - <pos=27%>{FinalStatusPatch.GetStatusText(data.Status)} - {roleText}";
                 if (ModeHandler.IsMode(ModeId.Zombie))
                 {
-                    roleText = data.ColorId == 1 ? CustomOptionHolder.Cs(Mode.Zombie.Main.Policecolor, "ZombiePoliceName") : CustomOptionHolder.Cs(Mode.Zombie.Main.Zombiecolor, "ZombieZombieName");
+                    roleText = data.ColorId == 1 ? ModHelpers.GetCs(Mode.Zombie.Main.Policecolor, "ZombiePoliceName") : ModHelpers.GetCs(Mode.Zombie.Main.Zombiecolor, "ZombieZombieName");
                     if (data.ColorId == 2) taskInfo = "";
-                    result = $"{ModHelpers.Cs(Palette.PlayerColors[data.ColorId], data.PlayerName)}{taskInfo} : {roleText}";
+                    result = $"{ModHelpers.GetCs(Palette.PlayerColors[data.ColorId], data.PlayerName)}{taskInfo} : {roleText}";
                 }
                 roleSummaryText.AppendLine(result);
             }
@@ -446,7 +446,7 @@ public class EndGameManagerSetUpPatch
         }
         Recorder.OnEndGame(AdditionalTempData.gameOverReason);
         AdditionalTempData.Clear();
-        OnGameEndPatch.WinText = ModHelpers.Cs(RoleColor, haison ? text : string.Format(text + " " + ModTranslation.GetString("WinName")));
+        OnGameEndPatch.WinText = ModHelpers.GetCs(RoleColor, haison ? text : string.Format(text + " " + ModTranslation.GetString("WinName")));
         IsHaison = false;
         GameHistoryManager.Send(textRenderer.text, RoleColor);
     }
@@ -1309,14 +1309,14 @@ public static class OnGameEndPatch
           
             string namesuffix = "";
             if (p.Object.IsLovers())
-                namesuffix = ModHelpers.Cs(RoleClass.Lovers.color, " ♥");
+                namesuffix = SetNamesClass.LoversSuffix;
             Dictionary<string, (Color, bool)> attributeRoles = new(SetNamesClass.AttributeRoleNameSet(p.Object));
             string attributeRoleName = "";
             if (attributeRoles.Count != 0)
             {
                 foreach (var kvp in attributeRoles)
                 {
-                    attributeRoleName += $" + {CustomOptionHolder.Cs(kvp.Value.Item1, kvp.Key)}";
+                    attributeRoleName += $" + {ModHelpers.GetCs(kvp.Value.Item1, kvp.Key)}";
                 }
             }
             AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo()

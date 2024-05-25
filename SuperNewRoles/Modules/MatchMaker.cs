@@ -264,75 +264,75 @@ public static class MatchTagOption
     {
         // 村レベル : 600000 ~
         Color villageLvColor = new(255f / 255f, 255f / 255f, 255f / 255f, 1);
-        BeginnerTag = CreateMatchMakeTag(600000, true, Cs(new Color(134f / 255f, 214f / 255f, 31f / 255f, 1), "BeginnerTag"), false, null, isHeader: true); // 初心者
-        IntermediateTag = CreateMatchMakeTag(600001, true, Cs(new Color(12f / 255f, 184f / 255f, 232f / 255f, 1), "IntermediateTag"), false, null); // 中級者
-        AdvancedTag = CreateMatchMakeTag(600002, true, Cs(new Color(167f / 255f, 139f / 255f, 92f / 255f, 1), "AdvancedTag"), false, null); // 上級者
-        CompetenceIsNotRequiredTag = CreateMatchMakeTag(600003, true, Cs(new Color(105f / 255f, 179f / 255f, 119f / 255f, 1), "CompetenceIsNotRequiredTag"), false, null); // 実力不問
+        BeginnerTag = CreateMatchMakeTag(600000, true, ModHelpers.GetCs(new Color(134f / 255f, 214f / 255f, 31f / 255f, 1), "BeginnerTag"), false, null, isHeader: true); // 初心者
+        IntermediateTag = CreateMatchMakeTag(600001, true, ModHelpers.GetCs(new Color(12f / 255f, 184f / 255f, 232f / 255f, 1), "IntermediateTag"), false, null); // 中級者
+        AdvancedTag = CreateMatchMakeTag(600002, true, ModHelpers.GetCs(new Color(167f / 255f, 139f / 255f, 92f / 255f, 1), "AdvancedTag"), false, null); // 上級者
+        CompetenceIsNotRequiredTag = CreateMatchMakeTag(600003, true, ModHelpers.GetCs(new Color(105f / 255f, 179f / 255f, 119f / 255f, 1), "CompetenceIsNotRequiredTag"), false, null); // 実力不問
 
         // プレイスタンス : 600100 ~
         Color playingStanceColor = new(255f / 255f, 255f / 255f, 255f / 255f, 1);
-        SeriousTag = CreateMatchMakeTag(600100, true, Cs(playingStanceColor, "SeriousTag"), false, null, isHeader: true); // ガチ勢
-        EnjoyTag = CreateMatchMakeTag(600101, true, Cs(playingStanceColor, "EnjoyTag"), false, null);  // エンジョイ勢
+        SeriousTag = CreateMatchMakeTag(600100, true, ModHelpers.GetCs(playingStanceColor, "SeriousTag"), false, null, isHeader: true); // ガチ勢
+        EnjoyTag = CreateMatchMakeTag(600101, true, ModHelpers.GetCs(playingStanceColor, "EnjoyTag"), false, null);  // エンジョイ勢
 
         // プレイスタイル : 600200 ~
         Color playingStyleColor = new(255f / 255f, 255f / 255f, 255f / 255f, 1);
-        SeriousnessTag = CreateMatchMakeTag(600200, true, Cs(playingStyleColor, "SeriousnessTag"), false, null, isHeader: true); // 真剣プレイ
-        WelcomeBeginnerTag = CreateMatchMakeTag(600201, true, Cs(playingStyleColor, "WelcomeBeginnerTag"), false, null); // 初心者歓迎
+        SeriousnessTag = CreateMatchMakeTag(600200, true, ModHelpers.GetCs(playingStyleColor, "SeriousnessTag"), false, null, isHeader: true); // 真剣プレイ
+        WelcomeBeginnerTag = CreateMatchMakeTag(600201, true, ModHelpers.GetCs(playingStyleColor, "WelcomeBeginnerTag"), false, null); // 初心者歓迎
 
         // 状態 600300
         Color conditionColor = new(255f / 255f, 255f / 255f, 255f / 255f, 1);
-        NowRecordingTag = CreateMatchMakeTag(600300, true, Cs(conditionColor, "NowRecordingTag"), false, null, isHeader: true); // 撮影中
-        NowBeingDeliveredTag = CreateMatchMakeTag(600301, true, Cs(conditionColor, "NowBeingDeliveredTag"), false, null); // 配信中
-        OKForRecordingTag = CreateMatchMakeTag(600302, true, Cs(conditionColor, "OKForRecordingTag"), false, null); // 撮影OK
-        OKForBeingDeliveredTag = CreateMatchMakeTag(600303, true, Cs(conditionColor, "OKForBeingDeliveredTag"), false, null); // 配信OK
-        NoRecordingTag = CreateMatchMakeTag(600304, true, Cs(conditionColor, "NoRecordingTag"), false, null); // 撮影NG
-        NoBeingDeliveredTag = CreateMatchMakeTag(600305, true, Cs(conditionColor, "NoBeingDeliveredTag"), false, null); // 配信NG
+        NowRecordingTag = CreateMatchMakeTag(600300, true, ModHelpers.GetCs(conditionColor, "NowRecordingTag"), false, null, isHeader: true); // 撮影中
+        NowBeingDeliveredTag = CreateMatchMakeTag(600301, true, ModHelpers.GetCs(conditionColor, "NowBeingDeliveredTag"), false, null); // 配信中
+        OKForRecordingTag = CreateMatchMakeTag(600302, true, ModHelpers.GetCs(conditionColor, "OKForRecordingTag"), false, null); // 撮影OK
+        OKForBeingDeliveredTag = CreateMatchMakeTag(600303, true, ModHelpers.GetCs(conditionColor, "OKForBeingDeliveredTag"), false, null); // 配信OK
+        NoRecordingTag = CreateMatchMakeTag(600304, true, ModHelpers.GetCs(conditionColor, "NoRecordingTag"), false, null); // 撮影NG
+        NoBeingDeliveredTag = CreateMatchMakeTag(600305, true, ModHelpers.GetCs(conditionColor, "NoBeingDeliveredTag"), false, null); // 配信NG
 
         // 会議方法 : 600400 ~
         Color meetingSystemColor = new(255f / 255f, 255f / 255f, 255f / 255f, 1);
-        FreeChatTag = CreateMatchMakeTag(600400, true, Cs(meetingSystemColor, "FreeChatTag"), false, null, isHeader: true); // フリーチャット
-        QuickChatTag = CreateMatchMakeTag(600401, true, Cs(meetingSystemColor, "QuickChatTag"), false, null); // クイックチャット
-        VoiceChatTag = CreateMatchMakeTag(600402, true, Cs(meetingSystemColor, "VoiceChatTag"), false, null); // VC
-        BetterCrewLinkTag = CreateMatchMakeTag(600403, true, Cs(meetingSystemColor, "BetterCrewLinkTag"), false, null); // 近アモ
-        CanListenOnlyTag = CreateMatchMakeTag(600404, true, Cs(meetingSystemColor, "CanListenOnlyTag"), false, null); // 聞き専可
-        FullVCOnlyTag = CreateMatchMakeTag(600405, true, Cs(meetingSystemColor, "FullVCOnlyTag"), false, null); // 聞き専不可
+        FreeChatTag = CreateMatchMakeTag(600400, true, ModHelpers.GetCs(meetingSystemColor, "FreeChatTag"), false, null, isHeader: true); // フリーチャット
+        QuickChatTag = CreateMatchMakeTag(600401, true, ModHelpers.GetCs(meetingSystemColor, "QuickChatTag"), false, null); // クイックチャット
+        VoiceChatTag = CreateMatchMakeTag(600402, true, ModHelpers.GetCs(meetingSystemColor, "VoiceChatTag"), false, null); // VC
+        BetterCrewLinkTag = CreateMatchMakeTag(600403, true, ModHelpers.GetCs(meetingSystemColor, "BetterCrewLinkTag"), false, null); // 近アモ
+        CanListenOnlyTag = CreateMatchMakeTag(600404, true, ModHelpers.GetCs(meetingSystemColor, "CanListenOnlyTag"), false, null); // 聞き専可
+        FullVCOnlyTag = CreateMatchMakeTag(600405, true, ModHelpers.GetCs(meetingSystemColor, "FullVCOnlyTag"), false, null); // 聞き専不可
 
         // レギュレーション : 600500 ~
         Color RegulationColor = new(255f / 255f, 255f / 255f, 255f / 255f, 1);
-        SheriffAndBlackCatRegulationTag = CreateMatchMakeTag(600500, false, Cs(RegulationColor, "SheriffAndBlackCatRegulationTag"), false, null, isHeader: true); // シェリマ (黒猫 & イビルハッカー)
-        SheriffAndMadRegulationTag = CreateMatchMakeTag(600501, true, Cs(Roles.RoleClass.Sheriff.color, "SheriffAndMadRegulationTag"), false, null); // シェリマ
-        NeutralKillerRegulationTag = CreateMatchMakeTag(600502, true, Cs(RegulationColor, "NeutralKillerRegulationTag"), false, null); // 第三キル人外入り
-        JackalRegulationTag = CreateMatchMakeTag(600511, true, Cs(Roles.RoleClass.JackalBlue, "JackalRegulationTag"), false, null); // ジャッカル入り
-        SidekickRegulationTag = CreateMatchMakeTag(600512, true, Cs(RegulationColor, "SidekickRegulationTag"), false, null); // SK有
-        SidekickKillerRegulationTag = CreateMatchMakeTag(600513, false, Cs(RegulationColor, "SidekickKillerRegulationTag"), false, null); // キル役職系SK有
-        ManyRolesRegulationTag = CreateMatchMakeTag(600503, true, Cs(RegulationColor, "ManyRolesRegulationTag"), false, null); // 多役
-        WerewolfMoonlightRegulationTag = CreateMatchMakeTag(600504, true, Cs(RegulationColor, "WerewolfMoonlightRegulationTag"), false, null); // 月下
-        VillageForOutsidersRegulationTag = CreateMatchMakeTag(600505, true, Cs(RegulationColor, "VillageForOutsidersRegulationTag"), false, null); // 人外村
-        DarkPotRegulationTag = CreateMatchMakeTag(600506, true, Cs(RegulationColor, "DarkPotRegulationTag"), false, null); // 闇鍋
-        OthersRegulationTag = CreateMatchMakeTag(600507, true, Cs(RegulationColor, "OthersRegulationTag"), false, null); // その他
-        TryingOutRolesRegulationTag = CreateMatchMakeTag(600508, true, Cs(RegulationColor, "TryingOutRolesRegulationTag"), false, null); // 役職お試し中(・ω・　)
-        AmusementRegulationTag = CreateMatchMakeTag(600509, true, Cs(RegulationColor, "AmusementRegulationTag"), false, null); // お遊びレギュ
-        RegulationAdjustedTag = CreateMatchMakeTag(600510, true, Cs(RegulationColor, "RegulationAdjustedTag"), false, null); // レギュ調整中
+        SheriffAndBlackCatRegulationTag = CreateMatchMakeTag(600500, false, ModHelpers.GetCs(RegulationColor, "SheriffAndBlackCatRegulationTag"), false, null, isHeader: true); // シェリマ (黒猫 & イビルハッカー)
+        SheriffAndMadRegulationTag = CreateMatchMakeTag(600501, true, ModHelpers.GetCs(Roles.RoleClass.Sheriff.color, "SheriffAndMadRegulationTag"), false, null); // シェリマ
+        NeutralKillerRegulationTag = CreateMatchMakeTag(600502, true, ModHelpers.GetCs(RegulationColor, "NeutralKillerRegulationTag"), false, null); // 第三キル人外入り
+        JackalRegulationTag = CreateMatchMakeTag(600511, true, ModHelpers.GetCs(Roles.RoleClass.JackalBlue, "JackalRegulationTag"), false, null); // ジャッカル入り
+        SidekickRegulationTag = CreateMatchMakeTag(600512, true, ModHelpers.GetCs(RegulationColor, "SidekickRegulationTag"), false, null); // SK有
+        SidekickKillerRegulationTag = CreateMatchMakeTag(600513, false, ModHelpers.GetCs(RegulationColor, "SidekickKillerRegulationTag"), false, null); // キル役職系SK有
+        ManyRolesRegulationTag = CreateMatchMakeTag(600503, true, ModHelpers.GetCs(RegulationColor, "ManyRolesRegulationTag"), false, null); // 多役
+        WerewolfMoonlightRegulationTag = CreateMatchMakeTag(600504, true, ModHelpers.GetCs(RegulationColor, "WerewolfMoonlightRegulationTag"), false, null); // 月下
+        VillageForOutsidersRegulationTag = CreateMatchMakeTag(600505, true, ModHelpers.GetCs(RegulationColor, "VillageForOutsidersRegulationTag"), false, null); // 人外村
+        DarkPotRegulationTag = CreateMatchMakeTag(600506, true, ModHelpers.GetCs(RegulationColor, "DarkPotRegulationTag"), false, null); // 闇鍋
+        OthersRegulationTag = CreateMatchMakeTag(600507, true, ModHelpers.GetCs(RegulationColor, "OthersRegulationTag"), false, null); // その他
+        TryingOutRolesRegulationTag = CreateMatchMakeTag(600508, true, ModHelpers.GetCs(RegulationColor, "TryingOutRolesRegulationTag"), false, null); // 役職お試し中(・ω・　)
+        AmusementRegulationTag = CreateMatchMakeTag(600509, true, ModHelpers.GetCs(RegulationColor, "AmusementRegulationTag"), false, null); // お遊びレギュ
+        RegulationAdjustedTag = CreateMatchMakeTag(600510, true, ModHelpers.GetCs(RegulationColor, "RegulationAdjustedTag"), false, null); // レギュ調整中
 
         // 使用機能 : 600600 ~
         Color useFeatureColor = new(255f / 255f, 255f / 255f, 255f / 255f, 1);
-        FeatureAdminLimitTag = CreateMatchMakeTag(600600, false, Cs(useFeatureColor, "FeatureAdminLimitTag"), false, null, isHeader: true); // アドミン使用制限
-        FeatureCanNotUseAdminTag = CreateMatchMakeTag(600601, true, Cs(useFeatureColor, "FeatureCanNotUseAdminTag"), false, null); // アドミン禁止
-        FeatureCanNotUseRecordsAdminTag = CreateMatchMakeTag(600602, false, Cs(useFeatureColor, "FeatureCanNotUseRecordsAdminTag"), false, null);  // アーカイブアドミン禁止
-        FeatureVaitalCanNotUseTag = CreateMatchMakeTag(600603, true, Cs(useFeatureColor, "FeatureVaitalCanNotUseTag"), false, null);  // バイタル禁止
-        FeatureVitalLimitTag = CreateMatchMakeTag(600604, false, Cs(useFeatureColor, "FeatureVitalLimitTag"), false, null);  // バイタル使用制限
-        FeatureCameraCanNotUseTag = CreateMatchMakeTag(600605, true, Cs(useFeatureColor, "FeatureCameraCanNotUseTag"), false, null);  // カメラ禁止
-        FeatureCameraLimitTag = CreateMatchMakeTag(600606, false, Cs(useFeatureColor, "FeatureCameraLimitTag"), false, null);  // カメラ使用制限
+        FeatureAdminLimitTag = CreateMatchMakeTag(600600, false, ModHelpers.GetCs(useFeatureColor, "FeatureAdminLimitTag"), false, null, isHeader: true); // アドミン使用制限
+        FeatureCanNotUseAdminTag = CreateMatchMakeTag(600601, true, ModHelpers.GetCs(useFeatureColor, "FeatureCanNotUseAdminTag"), false, null); // アドミン禁止
+        FeatureCanNotUseRecordsAdminTag = CreateMatchMakeTag(600602, false, ModHelpers.GetCs(useFeatureColor, "FeatureCanNotUseRecordsAdminTag"), false, null);  // アーカイブアドミン禁止
+        FeatureVaitalCanNotUseTag = CreateMatchMakeTag(600603, true, ModHelpers.GetCs(useFeatureColor, "FeatureVaitalCanNotUseTag"), false, null);  // バイタル禁止
+        FeatureVitalLimitTag = CreateMatchMakeTag(600604, false, ModHelpers.GetCs(useFeatureColor, "FeatureVitalLimitTag"), false, null);  // バイタル使用制限
+        FeatureCameraCanNotUseTag = CreateMatchMakeTag(600605, true, ModHelpers.GetCs(useFeatureColor, "FeatureCameraCanNotUseTag"), false, null);  // カメラ禁止
+        FeatureCameraLimitTag = CreateMatchMakeTag(600606, false, ModHelpers.GetCs(useFeatureColor, "FeatureCameraLimitTag"), false, null);  // カメラ使用制限
 
         // デバッグ : 600600 ~
         Color debugColor = (Color)Roles.RoleClass.Debugger.color;
         bool notDebugMode = !ConfigRoles.DebugMode.Value;
-        DebugNewRolesTag = CreateMatchMakeTag(600700, true, Cs(debugColor, "DebugNewRolesTag"), false, null, isHeader: true, isHidden: notDebugMode);
-        DebugNewFeaturesTag = CreateMatchMakeTag(600701, true, Cs(debugColor, "DebugNewFeaturesTag"), false, null, isHidden: notDebugMode);
-        DebugAddFeaturesTag = CreateMatchMakeTag(600702, true, Cs(debugColor, "DebugAddFeaturesTag"), false, null, isHidden: notDebugMode);
-        DebugChangeTag = CreateMatchMakeTag(600703, true, Cs(debugColor, "DebugChangeTag"), false, null, isHidden: notDebugMode);
-        DebugBugFixTag = CreateMatchMakeTag(600704, true, Cs(debugColor, "DebugBugFixTag"), false, null, isHidden: notDebugMode);
-        DebugOthersTag = CreateMatchMakeTag(600705, true, Cs(debugColor, "DebugOthersTag"), false, null, isHidden: notDebugMode);
+        DebugNewRolesTag = CreateMatchMakeTag(600700, true, ModHelpers.GetCs(debugColor, "DebugNewRolesTag"), false, null, isHeader: true, isHidden: notDebugMode);
+        DebugNewFeaturesTag = CreateMatchMakeTag(600701, true, ModHelpers.GetCs(debugColor, "DebugNewFeaturesTag"), false, null, isHidden: notDebugMode);
+        DebugAddFeaturesTag = CreateMatchMakeTag(600702, true, ModHelpers.GetCs(debugColor, "DebugAddFeaturesTag"), false, null, isHidden: notDebugMode);
+        DebugChangeTag = CreateMatchMakeTag(600703, true, ModHelpers.GetCs(debugColor, "DebugChangeTag"), false, null, isHidden: notDebugMode);
+        DebugBugFixTag = CreateMatchMakeTag(600704, true, ModHelpers.GetCs(debugColor, "DebugBugFixTag"), false, null, isHidden: notDebugMode);
+        DebugOthersTag = CreateMatchMakeTag(600705, true, ModHelpers.GetCs(debugColor, "DebugOthersTag"), false, null, isHidden: notDebugMode);
 
         if (notDebugMode)
         {

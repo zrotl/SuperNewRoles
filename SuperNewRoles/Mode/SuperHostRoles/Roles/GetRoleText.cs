@@ -15,7 +15,7 @@ public static class GetRoleTextClass
                 {
                     if (RoleClass.SerialKiller.SuicideTimers.TryGetValue(p.PlayerId, out float Time))
                     {
-                        returndata = ModHelpers.Cs(RoleClass.SerialKiller.color, "(" + ((int)Time + 1).ToString() + ")");
+                        returndata = ModHelpers.GetCs(RoleClass.SerialKiller.color, "(", ((int)Time + 1).ToString(), ")");
                     }
                 }
             }

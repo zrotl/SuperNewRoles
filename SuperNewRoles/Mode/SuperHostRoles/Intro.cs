@@ -65,7 +65,7 @@ class Intro
         __instance.RoleText.text = CustomRoles.GetRoleName(PlayerControl.LocalPlayer);               //役職名を変更
         __instance.RoleBlurbText.text = CustomRoles.GetRoleIntro(PlayerControl.LocalPlayer);     //イントロの簡易説明を変更
 
-        if (PlayerControl.LocalPlayer.IsLovers()) __instance.RoleBlurbText.text += "\n" + ModHelpers.Cs(RoleClass.Lovers.color, string.Format(ModTranslation.GetString("LoversIntro"), PlayerControl.LocalPlayer.GetOneSideLovers()?.GetDefaultName() ?? ""));
-        if (PlayerControl.LocalPlayer.IsQuarreled()) __instance.RoleBlurbText.text += "\n" + ModHelpers.Cs(RoleClass.Quarreled.color, string.Format(ModTranslation.GetString("QuarreledIntro"), PlayerControl.LocalPlayer.GetOneSideQuarreled()?.Data?.PlayerName ?? ""));
+        if (PlayerControl.LocalPlayer.IsLovers()) __instance.RoleBlurbText.text += "\n" + ModHelpers.GetCs(RoleClass.Lovers.color, string.Format(ModTranslation.GetString("LoversIntro"), PlayerControl.LocalPlayer.GetOneSideLovers()?.GetDefaultName() ?? ""));
+        if (PlayerControl.LocalPlayer.IsQuarreled()) __instance.RoleBlurbText.text += "\n" + ModHelpers.GetCs(RoleClass.Quarreled.color, string.Format(ModTranslation.GetString("QuarreledIntro"), PlayerControl.LocalPlayer.GetOneSideQuarreled()?.Data?.PlayerName ?? ""));
     }
 }

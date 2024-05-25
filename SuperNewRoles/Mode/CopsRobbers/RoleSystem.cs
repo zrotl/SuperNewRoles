@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using SuperNewRoles.Helpers;
 using SuperNewRoles.Mode.SuperHostRoles;
 using SuperNewRoles.Patches;
@@ -39,7 +40,7 @@ class RoleSystem
         if (player.IsMod()) return;
 
         string Name = player.GetDefaultName();
-        string NewName = "";
+        StringBuilder NewName = new();
         Dictionary<byte, string> ChangePlayers = new();
 
         /*
@@ -63,22 +64,12 @@ class RoleSystem
         }
         */
 
-        string TaskText = "";
-        if (!player.IsImpostor())
-        {
-            try
-            {
-                if (commsActive) TaskText = ModHelpers.Cs(Color.yellow, "(?/" + TaskCount.TaskDateNoClearCheck(player.Data).Item2 + ")");
-                else
-                {
-                    var (Complete, all) = TaskCount.TaskDateNoClearCheck(player.Data);
-                    TaskText = ModHelpers.Cs(Color.yellow, "(" + Complete + "/" + all + ")");
-                }
-            }
-            catch { }
-        }
-        NewName = "<size=75%>" + CustomRoles.GetRoleNameOnColor(player) + TaskText + "</size>\n" + (CopsRobbersOptions.CRHideName.GetBool() && CopsRobbersOptions.CopsRobbersMode.GetBool() ? " " : ModHelpers.Cs(CustomRoles.GetRoleColor(player), Name));
-        player.RpcSetNamePrivate(NewName);
+        NewName.Append("<size=75%>");
+        NewName.Append(CustomRoles.GetRoleNameOnColor(player));
+        NewName.Append(TaskCount.GetTaskCountText(player.Data, commsActive));
+        NewName.Append("</size>\n");
+        NewName.Append(CopsRobbersOptions.CRHideName.GetBool() && CopsRobbersOptions.CopsRobbersMode.GetBool() ? " " : ModHelpers.GetCs(CustomRoles.GetRoleColor(player), Name));
+        player.RpcSetNamePrivate(NewName.ToString());
     }
     public static void AssignRole()
     {

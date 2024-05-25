@@ -957,9 +957,30 @@ public static class ModHelpers
         return room.RoomId;
     }
 
-    public static string Cs(Color c, string s)
+    public static void ColorSB(StringBuilder builder, Color c)
     {
-        return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", CustomOptionHolder.ToByte(c.r), CustomOptionHolder.ToByte(c.g), CustomOptionHolder.ToByte(c.b), CustomOptionHolder.ToByte(c.a), s);
+        StringBuilder colorbuilder = new();
+        AppendCs(colorbuilder, c, builder);
+        builder = colorbuilder;
+    }
+    public static void AppendCs(StringBuilder builder, Color c, StringBuilder sb)
+    {
+        builder.AppendFormat("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>", CustomOptionHolder.ToByte(c.r), CustomOptionHolder.ToByte(c.g), CustomOptionHolder.ToByte(c.b), CustomOptionHolder.ToByte(c.a));
+        builder.Append(sb);
+        builder.Append("</color>");
+    }
+
+    public static void AppendCs(StringBuilder builder, Color c, params string[] ss)
+    {
+        builder.AppendFormat("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>", CustomOptionHolder.ToByte(c.r), CustomOptionHolder.ToByte(c.g), CustomOptionHolder.ToByte(c.b), CustomOptionHolder.ToByte(c.a));
+        foreach(string s in ss) builder.Append(s);
+        builder.Append("</color>");
+    }
+    public static string GetCs(Color c, params string[] ss)
+    {
+        StringBuilder builder = new();
+        AppendCs(builder, c, ss);
+        return builder.ToString();
     }
     public static T GetRandom<T>(this Il2CppSystem.Collections.Generic.List<T> list)
     {

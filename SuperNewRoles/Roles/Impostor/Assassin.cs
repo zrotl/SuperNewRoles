@@ -128,7 +128,7 @@ public static class Assassin
                 }, 10.5f, "Assassin Meet");
                 new LateTask(() =>
                 {
-                    exile.RpcSetName($"<size=200%>{CustomOptionHolder.Cs(RoleClass.Marlin.color, IntroData.MarlinIntro.NameKey + "Name")}<color=white>は誰だ？</size>");
+                    exile.RpcSetName($"<size=200%>{ModHelpers.GetCs(RoleClass.Marlin.color, IntroData.MarlinIntro.NameKey, "Name")}<color=white>は誰だ？</size>");
                 }, 12f, "Assassin Name");
                 new LateTask(() =>
                 {
