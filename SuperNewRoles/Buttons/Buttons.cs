@@ -133,7 +133,7 @@ static class HudManagerStartPatch
     public static void Postfix(HudManager __instance)
     {
         Roles.Attribute.Debugger.canSeeRole = false;
-
+        //ここから下のどこかに原因あり(というか必要なButton以外消したいので、使用中の役職一覧をGet出来るとBest(もしくは役職が選出された時点でButtonsのリストに入れるようにする？))
         PteranodonButton = new(
             () =>
             {
@@ -275,7 +275,8 @@ static class HudManagerStartPatch
                 writer.EndRPC();
                 RPCProcedure.WaveCannon((byte)WaveCannonObject.RpcType.Spawn, 0, CachedPlayer.LocalPlayer.PlayerPhysics.FlipX, CachedPlayer.LocalPlayer.PlayerId, pos, (WaveCannonObject.WCAnimType)WaveCannonJackal.WaveCannonJackalAnimTypeOption.GetSelection());
             },
-            (bool isAlive, RoleId role) => { return isAlive && role == RoleId.WaveCannonJackal && (!WaveCannonJackal.IwasSidekicked.Contains(PlayerControl.LocalPlayer.PlayerId) || WaveCannonJackal.WaveCannonJackalNewJackalHaveWaveCannon.GetBool()); },
+            (bool isAlive, RoleId role) => { return isAlive && role == RoleId.WaveCannonJackal && (WaveCannonJackal.WaveCannonJackalNewJackalHaveWaveCannon.GetBool() || !WaveCannonJackal.IwasSidekicked.Contains(PlayerControl.LocalPlayer.PlayerId)); },
+            //(bool isAlive, RoleId role) => { return isAlive && role == RoleId.WaveCannonJackal && (!WaveCannonJackal.IwasSidekicked.Contains(PlayerControl.LocalPlayer.PlayerId) || WaveCannonJackal.WaveCannonJackalNewJackalHaveWaveCannon.GetBool()); },
             () =>
             {
                 return PlayerControl.LocalPlayer.CanMove;
@@ -412,7 +413,8 @@ static class HudManagerStartPatch
                 RoleClass.Jumbo.Killed = true;
                 PlayerControl.LocalPlayer.killTimer = killTimer;
             },
-            (bool isAlive, RoleId role) => { return isAlive && role == RoleId.Jumbo && PlayerControl.LocalPlayer.IsImpostor() && !RoleClass.Jumbo.Killed && RoleClass.Jumbo.JumboSize.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && RoleClass.Jumbo.JumboSize[PlayerControl.LocalPlayer.PlayerId] >= (CustomOptionHolder.JumboMaxSize.GetFloat() / 10); },
+            (bool isAlive, RoleId role) => { return isAlive && role == RoleId.Jumbo && PlayerControl.LocalPlayer.IsImpostor() && !RoleClass.Jumbo.Killed && RoleClass.Jumbo.JumboSize.TryGetValue(PlayerControl.LocalPlayer.PlayerId, out float value) && value >= (CustomOptionHolder.JumboMaxSize.GetFloat() / 10); },
+            //(bool isAlive, RoleId role) => { return isAlive && role == RoleId.Jumbo && PlayerControl.LocalPlayer.IsImpostor() && !RoleClass.Jumbo.Killed && RoleClass.Jumbo.JumboSize.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && RoleClass.Jumbo.JumboSize[PlayerControl.LocalPlayer.PlayerId] >= (CustomOptionHolder.JumboMaxSize.GetFloat() / 10); },
             () =>
             {
                 return SetTarget(Crewmateonly: true) && PlayerControl.LocalPlayer.CanMove;

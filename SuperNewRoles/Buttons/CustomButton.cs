@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,6 +44,7 @@ public class CustomButton
     private readonly KeyCode? hotkey;
     private readonly int joystickkey;
     private readonly Func<bool> StopCountCool;
+    private static Stopwatch sw = new();
     public CustomButton(Action OnClick, Func<bool, RoleId, bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, ActionButton textTemplate, KeyCode? hotkey, int joystickkey, Func<bool> StopCountCool, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "", Color? color = null)
     {
         this.hudManager = hudManager;
@@ -99,10 +104,8 @@ public class CustomButton
         }
     }
 
-    public static void HudUpdate()
+    private static void buttonsUpdate(Action<CustomButton> action)
     {
-        bool isAlive = PlayerControl.LocalPlayer.IsAlive();
-        RoleId role = PlayerControl.LocalPlayer.GetRole();
         List<int> removes = null;
         int index = 0;
         foreach (CustomButton btn in buttons)
@@ -114,6 +117,59 @@ public class CustomButton
                 removes.Add(index);
                 continue;
             }
+            action(btn);
+            index++;
+        }
+        if (removes != null)
+        {
+            foreach (int i in Enumerable.Reverse(removes))
+            {
+                buttons[i] = buttons[buttons.Count - 1];
+                buttons.RemoveAt(buttons.Count - 1);
+            }
+        }
+    }
+
+    private static void ParallelCheckHasButton()
+    {
+        bool isAlive = PlayerControl.LocalPlayer.IsAlive();
+        RoleId role = PlayerControl.LocalPlayer.GetRole();
+
+        if (isAlive != isAliveCache || role != roleCache)
+        {
+            Parallel.ForEach(buttons, btn => btn.CheckHasButton(isAlive, role));
+            isAliveCache = isAlive;
+            roleCache = role;
+        }
+
+
+        foreach (CustomButton btn in buttons)
+        {
+            try
+            {
+                btn.Update();
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine("ButtonError:" + e);
+            }
+        }
+    }
+
+    public static void HudUpdate()
+    {
+        ParallelCheckHasButton();
+        return;
+        bool isAlive = PlayerControl.LocalPlayer.IsAlive();
+        RoleId role = PlayerControl.LocalPlayer.GetRole();
+
+        foreach (CustomButton btn in buttons)
+        {
+            if (btn != null && btn.actionButton != null) btn.Update(isAlive, role);
+        }
+
+        return;
+        buttonsUpdate((CustomButton btn) => {
             try
             {
                 btn.Update(isAlive, role);
@@ -122,63 +178,41 @@ public class CustomButton
             {
                 System.Console.WriteLine("ButtonError:" + e);
             }
-            index++;
-        }
-        if (removes != null)
-        {
-            foreach (int i in removes)
-            {
-                buttons.RemoveAt(i);
-            }
-        }
+        });
     }
 
     public static void MeetingEndedUpdate()
     {
         bool isAlive = PlayerControl.LocalPlayer.IsAlive();
         RoleId role = PlayerControl.LocalPlayer.GetRole();
-        List<int> removes = null;
-        int index = 0;
-        foreach (CustomButton btn in buttons)
-        {
-            if (btn == null || btn.actionButton == null)
-            {
-                if (removes == null)
-                    removes = new();
-                removes.Add(index);
-                continue;
-            }
+        buttonsUpdate((CustomButton btn) => {
             try
             {
                 btn.OnMeetingEnds();
-                if (btn.HasButton(isAlive, role)) btn.Update(isAlive, role);
+                btn.Update(isAlive, role);
             }
             catch (Exception e)
             {
                 if (ConfigRoles.DebugMode.Value) System.Console.WriteLine("MeetingEnd_ButtonError:" + e);
             }
-            index++;
-        }
-        if (removes != null)
-        {
-            foreach (int i in removes)
-            {
-                buttons.RemoveAt(i);
-            }
-        }
+        });
     }
 
+    private bool Active = true;
     public void SetActive(bool isActive)
     {
+        if (isActive == this.Active) return;
         if (isActive)
         {
             actionButton.gameObject.SetActive(true);
             actionButton.graphic.enabled = true;
+            this.Active = true;
         }
         else
         {
             actionButton.gameObject.SetActive(false);
             actionButton.graphic.enabled = false;
+            this.Active = false;
         }
     }
 
@@ -199,17 +233,39 @@ public class CustomButton
         }
     }
 
+    private bool hasbutton;
+    private static bool isAliveCache;
+    private static RoleId roleCache;
+    private void CheckHasButton(bool isAlive, RoleId role)
+    {
+        this.hasbutton = HasButton(isAlive, role);
+    }
+
+    //private bool isAliveCache;
+    //private RoleId roleCache;
     private void Update(bool isAlive, RoleId role)
+    {
+        //if (isAlive != this.isAliveCache || role != this.roleCache)
+        //{
+        CheckHasButton(isAlive, role);
+        //    this.isAliveCache = isAlive;
+        //    this.roleCache = role;
+        //}
+        Update();
+    }
+
+    private void Update()
     {
         var localPlayer = CachedPlayer.LocalPlayer;
         var moveable = localPlayer.PlayerControl.moveable;
 
-        if (localPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton(isAlive, role))
+        //SetActiveに原因あり→SetActiveの状態をキャッシュし、別の状態にする場合のみSetActiveを呼び出す？　HasButtonは一部怪しいところもあるけど多分大丈夫
+        if (!this.hasbutton || localPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || (!hudManager.UseButton.isActiveAndEnabled && !hudManager.PetButton.isActiveAndEnabled))
         {
             SetActive(false);
             return;
         }
-        SetActive(hudManager.UseButton.isActiveAndEnabled || hudManager.PetButton.isActiveAndEnabled);
+        SetActive(true);
 
         actionButton.graphic.sprite = Sprite;
         if (showButtonText && buttonText != "")
