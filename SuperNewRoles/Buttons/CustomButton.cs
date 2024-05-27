@@ -137,7 +137,9 @@ public class CustomButton
 
         if (isAlive != isAliveCache || role != roleCache)
         {
-            Parallel.ForEach(buttons, btn => btn.CheckHasButton(isAlive, role));
+            Parallel.ForEach(buttons, btn => {
+                if (btn != null && btn.actionButton != null) btn.CheckHasButton(isAlive, role);
+            });
             isAliveCache = isAlive;
             roleCache = role;
         }
@@ -147,7 +149,7 @@ public class CustomButton
         {
             try
             {
-                btn.Update();
+                if (btn != null && btn.actionButton != null) btn.Update();
             }
             catch (Exception e)
             {
