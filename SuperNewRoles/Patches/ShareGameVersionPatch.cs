@@ -42,7 +42,6 @@ class ShareGameVersion
         writer.Write((byte)(SuperNewRolesPlugin.ThisVersion.Revision < 0 ? 0xFF : SuperNewRolesPlugin.ThisVersion.Revision));
         writer.Write(ModuleVersion);
         AmongUsClient.Instance.FinishRpcImmediately(writer);
-        SuperNewRolesPlugin.Logger.LogInfo("[VersionShare]Version Shared!");
         RPCProcedure.ShareSNRversion(SuperNewRolesPlugin.ThisVersion.Major, SuperNewRolesPlugin.ThisVersion.Minor, SuperNewRolesPlugin.ThisVersion.Build, SuperNewRolesPlugin.ThisVersion.Revision, Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId, AmongUsClient.Instance.ClientId);
     }
 
