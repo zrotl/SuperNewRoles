@@ -80,7 +80,7 @@ public class MapOption
     {
         // |:========== マップの設定 ==========:|
 
-        MapOptionSetting = Create(101900, true, CustomOptionType.Generic, ModHelpers.GetCs(new Color(170f / 255f, 76f / 255f, 143f / 255f, 1), "MapOptionSetting"), false, null, isHeader: true);
+        MapOptionSetting = Create(101900, true, CustomOptionType.Generic, CustomOptionHolder.GetCsWithTranslation(new Color(170f / 255f, 76f / 255f, 143f / 255f, 1), "MapOptionSetting"), false, null, isHeader: true);
 
         // |:========== 情報機器制限の設定 ==========:|
         DeviceOptions = Create(102000, true, CustomOptionType.Generic, "DeviceOptionsSetting", false, MapOptionSetting, isHeader: true);
