@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using AmongUs.GameOptions;
 using HarmonyLib;
 using Il2CppSystem.Runtime.Remoting.Lifetime;
@@ -63,7 +64,6 @@ public class FixedUpdate
         }
     }
     public static bool IsProDown;
-
     public static void Postfix(PlayerControl __instance)
     {
         if (!PlayerAnimation.IsCreatedAnim(__instance.PlayerId))
@@ -81,7 +81,6 @@ public class FixedUpdate
         {
             return;
         }
-
         SetBasePlayerOutlines();
         LadderDead.FixedUpdate();
         CustomRoles.FixedUpdate();
