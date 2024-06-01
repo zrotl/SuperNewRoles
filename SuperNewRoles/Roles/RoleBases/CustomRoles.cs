@@ -166,6 +166,10 @@ public static class CustomRoles
     }
     public static Color GetRoleColor(RoleId role, PlayerControl player = null, bool IsImpostorReturn = false)
     {
+        if (player != null && AmongUsClient.Instance.GameState == AmongUsClient.GameStates.Started)
+        {
+            if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId && RoleClass.Stefinder.IsKill) return Color.red;
+        }
         RoleInfo roleInfo = RoleInfoManager.GetRoleInfo(role);
         if (roleInfo != null)
             return roleInfo.RoleColor;

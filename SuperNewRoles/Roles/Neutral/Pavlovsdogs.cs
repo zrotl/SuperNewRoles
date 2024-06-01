@@ -53,11 +53,11 @@ public static class Pavlovsdogs
         {
             foreach (PlayerControl p in RoleClass.Pavlovsdogs.PavlovsdogsPlayer)
             {
-                SetNamesClass.SetPlayerRoleInfo(p);
+                if (SetNamesClass.CachedPlayersState[p.PlayerId].infoflg) SetNamesClass.SetPlayerRoleInfo(p);
             }
             foreach (PlayerControl p in RoleClass.Pavlovsowner.PavlovsownerPlayer)
             {
-                SetNamesClass.SetPlayerRoleInfo(p);
+                if (SetNamesClass.CachedPlayersState[p.PlayerId].infoflg) SetNamesClass.SetPlayerRoleInfo(p);
             }
         }
     }
