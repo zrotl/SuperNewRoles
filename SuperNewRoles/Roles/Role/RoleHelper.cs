@@ -1186,7 +1186,7 @@ public static class RoleHelpers
                 RoleClass.NiceTeleporter.NiceTeleporterPlayer.RemoveAll(ClearRemove);
                 break;
             case RoleId.Celebrity:
-                RoleClass.Celebrity.CelebrityPlayer.RemoveAll(ClearRemove);
+                RoleClass.Celebrity.CelebrityPlayer.RemoveWhere(ClearRemove);
                 break;
             case RoleId.Nocturnality:
                 RoleClass.Nocturnality.NocturnalityPlayer.RemoveAll(ClearRemove);

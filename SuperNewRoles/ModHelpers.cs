@@ -1118,7 +1118,16 @@ public static class ModHelpers
         Logger.Error($"idと合致するVentIdが見つかりませんでした。nullを返却します。id:{id}", "ModHelpers");
         return null;
     }
-
+    public static bool IsCheckListPlayerControl(this HashSet<PlayerControl> listData, PlayerControl CheckPlayer)
+    {
+        foreach (PlayerControl Player in listData)
+        {
+            if (Player is null) continue;
+            if (Player.PlayerId == CheckPlayer.PlayerId)
+                return true;
+        }
+        return false;
+    }
     public static bool IsCheckListPlayerControl(this List<PlayerControl> listData, PlayerControl CheckPlayer)
     {
         foreach (PlayerControl Player in listData)

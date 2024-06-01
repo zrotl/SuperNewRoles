@@ -136,7 +136,7 @@ public static class ChangeName
         if (!RoleClass.Camouflager.IsCamouflage)
         {
             // スターパッシブ能力 [ カリスマ ] の処理
-            List<PlayerControl> CelebrityViewPlayers = RoleClass.Celebrity.ChangeRoleView ?
+            HashSet<PlayerControl> CelebrityViewPlayers = RoleClass.Celebrity.ChangeRoleView ?
             RoleClass.Celebrity.ViewPlayers : RoleClass.Celebrity.CelebrityPlayer;
 
             foreach (PlayerControl viewPlayer in CelebrityViewPlayers)

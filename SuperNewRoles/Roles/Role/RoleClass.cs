@@ -1443,10 +1443,10 @@ public static class RoleClass
     }
     public static class Celebrity
     {
-        public static List<PlayerControl> CelebrityPlayer;
+        public static HashSet<PlayerControl> CelebrityPlayer;
         public static Color32 color = Color.yellow;
         public static bool ChangeRoleView;
-        public static List<PlayerControl> ViewPlayers;
+        public static HashSet<PlayerControl> ViewPlayers;
         public static float FlashTime;
         public static void ClearAndReload()
         {
