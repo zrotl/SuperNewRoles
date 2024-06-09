@@ -385,6 +385,7 @@ public class SetNamesClass
 }
 public class SetNameUpdate
 {
+    //TODO:本当はRPCcallでの役職変更や役職ごとの条件を満たしたとき・Killされた時のみ呼び出すべき
     public static void Postfix(PlayerControl __instance)
     {
         SetNamesClass.ResetNameTagsAndColors();
