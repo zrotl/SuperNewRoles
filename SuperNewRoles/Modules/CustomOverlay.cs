@@ -773,6 +773,10 @@ public class CustomOverlays
         int firstPage = SuperNewRolesPlugin.optionsPage;
         int page = firstPage;
 
+        left = GameOptionsDataPatch.getData(firstPage);
+        right = GameOptionsDataPatch.getData(firstPage + 1);
+        return;
+
         left = GameOptionsDataPatch.ResultData();
         SuperNewRolesPlugin.optionsPage = page + 1;
 

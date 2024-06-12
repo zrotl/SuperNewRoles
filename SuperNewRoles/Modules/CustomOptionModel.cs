@@ -17,6 +17,7 @@ using SuperNewRoles.Roles.Role;
 using SuperNewRoles.Roles.RoleBases;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements.UIR;
 using static SuperNewRoles.Modules.CustomRegulation;
 
 namespace SuperNewRoles.Modules;
@@ -1221,7 +1222,7 @@ class GameSettingMenuStartPatch
     }
 }
 
-[HarmonyPatch]
+//[HarmonyPatch]
 class GameOptionsDataPatch
 {
     public static string Tl(string key)
@@ -1229,10 +1230,10 @@ class GameOptionsDataPatch
         return ModTranslation.GetString(key);
     }
 
-    private static IEnumerable<MethodBase> TargetMethods()
-    {
-        return typeof(IGameOptionsExtensions).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 2 && x.GetParameters()[1].ParameterType == typeof(int));
-    }
+    //private static IEnumerable<MethodBase> TargetMethods()
+    //{
+    //    return typeof(IGameOptionsExtensions).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 2 && x.GetParameters()[1].ParameterType == typeof(int));
+    //}
 
     public static string OptionToString(CustomOption option)
     {
@@ -1456,7 +1457,14 @@ class GameOptionsDataPatch
             pages.Add(page);
         }
 
-        ResultPages = pages;
+        ResultPages = new();
+        int numPages = pages.Count + 1;
+        for (int i = 1; i < numPages; i++)
+        {
+            ResultPages.Add(pages[i - 1].Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" ({i + 1}/{numPages})");
+        }
+
+        SuperNewRolesPlugin.optionsMaxPage = numPages - 1;
     }
     public static string ResultData()
     {
@@ -1465,22 +1473,49 @@ class GameOptionsDataPatch
         SuperNewRolesPlugin.optionsMaxPage = numPages - 1;
         int counter = SuperNewRolesPlugin.optionsPage %= numPages;
         if (counter == 0) return DefaultResult.Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" ({counter + 1}/{numPages})";
-        return ResultPages[counter-1].Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" ({counter + 1}/{numPages})";
+        return ResultPages[counter-1];
     }
-    public static void Postfix(ref string __result)
+
+    public static string getData(int page)
     {
-        return;
-        DefaultResult = __result;
-        __result = ResultData();
+        if (ResultPages == null) UpdateData();
+        if (page == 0) return DefaultResult.Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" (1/{GameOptionsDataPatch.ResultPages.Count + 1})";
+        return ResultPages[page-1];
     }
+    //public static void Postfix(ref string __result)
+    //{
+    //    DefaultResult = __result;
+    //    //__result = ResultData();
+    //}
 }
 
 [HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.Start))]
-public static class LobbyBehaviourPatch
+public static class LobbyBehaviourStartPatch
 {
     public static void Postfix()
     {
+        GameOptionsDataPatch.UpdateData();
+        GameOptionsDataPatch.DefaultResult = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(GameData.Instance ? GameData.Instance.PlayerCount : 10);
         DestroyableSingleton<HudManager>.Instance.GameSettings.enableAutoSizing = false;
+    }
+}
+
+[HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.FixedUpdate))]
+public static class LobbyBehaviourFixedUpdatePatch
+{
+    public static bool Prefix()
+    {
+        if (!DestroyableSingleton<HudManager>.Instance.GameSettings.gameObject.active)
+        {
+            setHudText(SuperNewRolesPlugin.optionsPage);
+            DestroyableSingleton<HudManager>.Instance.GameSettings.gameObject.SetActive(true);
+        }
+        return false;
+    }
+    public static void setHudText(int page)
+    {
+        //TODO:fontsizeを設定したい
+        DestroyableSingleton<HudManager>.Instance.GameSettings.text = GameOptionsDataPatch.getData(page);
     }
 }
 
@@ -1519,6 +1554,8 @@ public static class GameOptionsNextPagePatch
             // ページが最大ページを超えたら, ページを0に戻す
             if (SuperNewRolesPlugin.optionsPage > SuperNewRolesPlugin.optionsMaxPage)
                 SuperNewRolesPlugin.optionsPage = 0;
+
+            LobbyBehaviourFixedUpdatePatch.setHudText(SuperNewRolesPlugin.optionsPage);
         }
     }
 }
