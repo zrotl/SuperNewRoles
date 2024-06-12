@@ -1061,7 +1061,7 @@ public class GameOptionsMenuValueChangedPatch
 {
     public static void Postfix()
     {
-        Task.Run(GameOptionsDataPatch.UpdateData);
+        GameOptionsDataPatch.UpdateData();
     }
 }
 
@@ -1469,8 +1469,18 @@ class GameOptionsDataPatch
     }
     public static void Postfix(ref string __result)
     {
+        return;
         DefaultResult = __result;
         __result = ResultData();
+    }
+}
+
+[HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.Start))]
+public static class LobbyBehaviourPatch
+{
+    public static void Postfix()
+    {
+        DestroyableSingleton<HudManager>.Instance.GameSettings.enableAutoSizing = false;
     }
 }
 
