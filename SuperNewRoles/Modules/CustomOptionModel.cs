@@ -1464,6 +1464,9 @@ class GameOptionsDataPatch
             ResultPages.Add(pages[i - 1].Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" ({i + 1}/{numPages})");
         }
 
+        DefaultResult = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(GameData.Instance ? GameData.Instance.PlayerCount : 10)
+            .Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" (1/{numPages})";
+
         SuperNewRolesPlugin.optionsMaxPage = numPages - 1;
     }
     public static string ResultData()
@@ -1479,7 +1482,7 @@ class GameOptionsDataPatch
     public static string getData(int page)
     {
         if (ResultPages == null) UpdateData();
-        if (page == 0) return DefaultResult.Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" (1/{GameOptionsDataPatch.ResultPages.Count + 1})";
+        if (page == 0) return DefaultResult;
         return ResultPages[page-1];
     }
     //public static void Postfix(ref string __result)
@@ -1495,7 +1498,6 @@ public static class LobbyBehaviourStartPatch
     public static void Postfix()
     {
         GameOptionsDataPatch.UpdateData();
-        GameOptionsDataPatch.DefaultResult = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(GameData.Instance ? GameData.Instance.PlayerCount : 10);
         DestroyableSingleton<HudManager>.Instance.GameSettings.enableAutoSizing = false;
     }
 }
@@ -1507,15 +1509,31 @@ public static class LobbyBehaviourFixedUpdatePatch
     {
         if (!DestroyableSingleton<HudManager>.Instance.GameSettings.gameObject.active)
         {
-            setHudText(SuperNewRolesPlugin.optionsPage);
             DestroyableSingleton<HudManager>.Instance.GameSettings.gameObject.SetActive(true);
+            setHudText(SuperNewRolesPlugin.optionsPage);
         }
         return false;
     }
     public static void setHudText(int page)
     {
-        //TODO:fontsizeを設定したい
-        DestroyableSingleton<HudManager>.Instance.GameSettings.text = GameOptionsDataPatch.getData(page);
+        TMPro.TextMeshPro gameSettings = DestroyableSingleton<HudManager>.Instance.GameSettings;
+        gameSettings.SetText(GameOptionsDataPatch.getData(page));
+
+        //この処理がないと初回呼び出し時にpreferredWidth・Heightが変な値になる
+        gameSettings.rectTransform.localScale = Vector3.one;
+        Vector2 preferredDimensions = gameSettings.GetPreferredValues(GameOptionsDataPatch.getData(page), gameSettings.GetPreferredWidth(), 0);
+        gameSettings.rectTransform.sizeDelta = preferredDimensions;
+
+        float scaleX = Mathf.Clamp(gameSettings.rectTransform.rect.width / gameSettings.GetPreferredWidth(), 0f, 1f);
+        float scaleY = Mathf.Clamp(gameSettings.rectTransform.rect.height / gameSettings.GetPreferredHeight(), 0f, 1f);
+        if (scaleX < scaleY)
+        {
+            gameSettings.rectTransform.localScale = new Vector3(scaleX, scaleX, scaleX);
+        }
+        else
+        {
+            gameSettings.rectTransform.localScale = new Vector3(scaleY, scaleY, scaleY);
+        }
     }
 }
 
