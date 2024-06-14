@@ -1222,18 +1222,12 @@ class GameSettingMenuStartPatch
     }
 }
 
-//[HarmonyPatch]
 class GameOptionsDataPatch
 {
     public static string Tl(string key)
     {
         return ModTranslation.GetString(key);
     }
-
-    //private static IEnumerable<MethodBase> TargetMethods()
-    //{
-    //    return typeof(IGameOptionsExtensions).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 2 && x.GetParameters()[1].ParameterType == typeof(int));
-    //}
 
     public static string OptionToString(CustomOption option)
     {
@@ -1315,8 +1309,8 @@ class GameOptionsDataPatch
         GetTaskTriggerAbilityTaskNumber,
     }
 
-    public static string DefaultResult = "";
-    public static List<string> ResultPages = null;
+    private static string DefaultResult = "";
+    private static List<string> ResultPages = null;
     public static void UpdateData()
     {
         List<string> pages = new();
@@ -1435,26 +1429,26 @@ class GameOptionsDataPatch
         }
         int maxLines = 28;
         int lineCount = 0;
-        string page = "";
+        StringBuilder page = new();
         foreach (var e in entries)
         {
             int lines = e.Count(c => c == '\n') + 1;
 
             if (lineCount + lines > maxLines)
             {
-                pages.Add(page);
-                page = "";
+                pages.Add(page.ToString());
+                page.Clear();
                 lineCount = 0;
             }
 
-            page = page + e + "\n\n";
+            page.Append(e).Append("\n\n");
             lineCount += lines + 1;
         }
 
-        page = page.Trim('\r', '\n');
-        if (page != "")
+        string lastpage = page.ToString().Trim('\r', '\n');
+        if (lastpage != "")
         {
-            pages.Add(page);
+            pages.Add(lastpage);
         }
 
         ResultPages = new();
@@ -1469,27 +1463,13 @@ class GameOptionsDataPatch
 
         SuperNewRolesPlugin.optionsMaxPage = numPages - 1;
     }
-    public static string ResultData()
-    {
-        if (ResultPages == null) UpdateData();
-        int numPages = ResultPages.Count + 1;
-        SuperNewRolesPlugin.optionsMaxPage = numPages - 1;
-        int counter = SuperNewRolesPlugin.optionsPage %= numPages;
-        if (counter == 0) return DefaultResult.Trim('\r', '\n') + "\n\n" + Tl("SettingPressTabForMore") + $" ({counter + 1}/{numPages})";
-        return ResultPages[counter-1];
-    }
 
-    public static string getData(int page)
+    public static string getHudString(int pagenum)
     {
         if (ResultPages == null) UpdateData();
-        if (page == 0) return DefaultResult;
-        return ResultPages[page-1];
+        if (pagenum == 0) return DefaultResult;
+        return ResultPages[pagenum - 1];
     }
-    //public static void Postfix(ref string __result)
-    //{
-    //    DefaultResult = __result;
-    //    //__result = ResultData();
-    //}
 }
 
 [HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.Start))]
@@ -1499,6 +1479,8 @@ public static class LobbyBehaviourStartPatch
     {
         GameOptionsDataPatch.UpdateData();
         DestroyableSingleton<HudManager>.Instance.GameSettings.enableAutoSizing = false;
+        DestroyableSingleton<HudManager>.Instance.GameSettings.gameObject.SetActive(true);
+        LobbyBehaviourFixedUpdatePatch.setHudText(SuperNewRolesPlugin.optionsPage);
     }
 }
 
@@ -1517,11 +1499,11 @@ public static class LobbyBehaviourFixedUpdatePatch
     public static void setHudText(int page)
     {
         TMPro.TextMeshPro gameSettings = DestroyableSingleton<HudManager>.Instance.GameSettings;
-        gameSettings.SetText(GameOptionsDataPatch.getData(page));
+        gameSettings.SetText(GameOptionsDataPatch.getHudString(page));
 
         //この処理がないと初回呼び出し時にpreferredWidth・Heightが変な値になる
         gameSettings.rectTransform.localScale = Vector3.one;
-        Vector2 preferredDimensions = gameSettings.GetPreferredValues(GameOptionsDataPatch.getData(page), gameSettings.GetPreferredWidth(), 0);
+        Vector2 preferredDimensions = gameSettings.GetPreferredValues(GameOptionsDataPatch.getHudString(page), gameSettings.GetPreferredWidth(), 0);
         gameSettings.rectTransform.sizeDelta = preferredDimensions;
 
         float scaleX = Mathf.Clamp(gameSettings.rectTransform.rect.width / gameSettings.GetPreferredWidth(), 0f, 1f);

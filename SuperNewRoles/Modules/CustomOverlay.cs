@@ -773,17 +773,8 @@ public class CustomOverlays
         int firstPage = SuperNewRolesPlugin.optionsPage;
         int page = firstPage;
 
-        left = GameOptionsDataPatch.getData(firstPage);
-        right = GameOptionsDataPatch.getData(firstPage + 1);
-        return;
-
-        left = GameOptionsDataPatch.ResultData();
-        SuperNewRolesPlugin.optionsPage = page + 1;
-
-        if (SuperNewRolesPlugin.optionsPage <= SuperNewRolesPlugin.optionsMaxPage)
-            right = GameOptionsDataPatch.ResultData();
-
-        SuperNewRolesPlugin.optionsPage = firstPage; // 現在のページを左の列に表示しているページに戻す
+        left = GameOptionsDataPatch.getHudString(firstPage);
+        right = GameOptionsDataPatch.getHudString(firstPage + 1);
     }
 
     // マッチメイキングタグの設定を表示する
