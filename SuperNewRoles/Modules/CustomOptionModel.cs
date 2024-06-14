@@ -570,20 +570,6 @@ public class CustomOptionBlank : CustomOption
 
 }
 
-[HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Close))]
-public static class GameSettingMenuClosePatch
-{
-    public static void Postfix()
-    {
-        if (CustomOption.IsValuesUpdated)
-        {
-            OptionSaver.WriteNowOptions();
-            CustomOption.IsValuesUpdated = false;
-        }
-        GameOptionsDataPatch.UpdateData();
-    }
-}
-
 [HarmonyPatch(typeof(RoleOptionsData), nameof(RoleOptionsData.GetNumPerGame))]
 class RoleOptionsDataGetNumPerGamePatch
 {
@@ -600,13 +586,145 @@ class RoleOptionsDataGetNumPerGamePatch
     }
 }
 
-[HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Start))]
-class GameSettingMenuStartPatch2
+[HarmonyPatch(typeof(KeyValueOption), nameof(KeyValueOption.OnEnable))]
+public class KeyValueOptionEnablePatch
 {
-    public static void Postfix(GameSettingMenu __instance)
+    public static void Postfix(KeyValueOption __instance)
     {
-        __instance.Tabs.SetActive(true);
+        IGameOptions gameOptions = GameManager.Instance.LogicOptions.currentGameOptions;
+        if (__instance.Title == StringNames.GameMapName)
+        {
+            __instance.Selected = gameOptions.MapId;
+        }
+        try
+        {
+            __instance.ValueText.text = __instance.Values[Mathf.Clamp(__instance.Selected, 0, __instance.Values.Count - 1)].Key;
+        }
+        catch { }
+    }
+}
 
+[HarmonyPatch(typeof(StringOption), nameof(StringOption.OnEnable))]
+class StringOptionEnablePatch
+{
+    static bool Prefix(StringOption __instance)
+    {
+        CustomOption option = CustomOption.options.FirstOrDefault(option => option.optionBehaviour == __instance);
+        if (option == null)
+        {
+            RegulationData Regulation = RegulationData.Regulations.FirstOrDefault(regulation => regulation.optionBehaviour == __instance);
+            if (Regulation != null)
+            {
+                __instance.OnValueChanged = new Action<OptionBehaviour>((o) => { });
+                __instance.TitleText.text = Regulation.title;
+                __instance.Value = __instance.oldValue = 0;
+                __instance.ValueText.text = RegulationData.Selected == Regulation.id ? ModTranslation.GetString("optionOn") : ModTranslation.GetString("optionOff");
+
+                return false;
+            }
+            return true;
+        }
+
+        __instance.OnValueChanged = new Action<OptionBehaviour>((o) => { });
+        __instance.TitleText.text = option.GetName();
+        __instance.Value = __instance.oldValue = option.selection;
+        __instance.ValueText.text = option.GetString();
+
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(StringOption), nameof(StringOption.Increase))]
+public class StringOptionIncreasePatch
+{
+    public static bool Prefix(StringOption __instance)
+    {
+        CustomOption option = CustomOption.options.FirstOrDefault(option => option.optionBehaviour == __instance);
+        if (option == null)
+        {
+            RegulationData Regulation = RegulationData.Regulations.FirstOrDefault(regulation => regulation.optionBehaviour == __instance);
+            if (Regulation != null)
+            {
+                foreach (var regulation in RegulationData.Regulations)
+                {
+                    if (regulation.optionBehaviour is not null and StringOption stringOption)
+                    {
+                        stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => { });
+                        stringOption.TitleText.text = regulation.title;
+                        stringOption.oldValue = __instance.Value = 0;
+                        stringOption.ValueText.text = ModTranslation.GetString("optionOff");
+                    }
+                }
+                Select(Regulation.id);
+                __instance.oldValue = __instance.Value = 1;
+                __instance.ValueText.text = ModTranslation.GetString("optionOn");
+                return false;
+            }
+            return true;
+        }
+        option.UpdateSelection(option.selection + 1);
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(StringOption), nameof(StringOption.Decrease))]
+public class StringOptionDecreasePatch
+{
+    public static bool Prefix(StringOption __instance)
+    {
+        CustomOption option = CustomOption.options.FirstOrDefault(option => option.optionBehaviour == __instance);
+        if (option == null)
+        {
+            RegulationData Regulation = RegulationData.Regulations.FirstOrDefault(regulation => regulation.optionBehaviour == __instance);
+            if (Regulation != null)
+            {
+                bool isReset = true;
+                bool IsFirst = true;
+                if (Regulation.optionBehaviour is not null and StringOption stringOptiona)
+                {
+                    if (stringOptiona.Value == 0) return false;
+                }
+                foreach (var regulation in RegulationData.Regulations)
+                {
+                    if (regulation.optionBehaviour is not null and StringOption stringOption)
+                    {
+                        if (stringOption.ValueText.text == ModTranslation.GetString("optionOn"))
+                        {
+                            if (!IsFirst)
+                            {
+                                isReset = false;
+                            }
+                            IsFirst = false;
+                        }
+                    }
+                }
+                __instance.oldValue = __instance.Value = 0;
+                __instance.ValueText.text = ModTranslation.GetString("optionOff");
+                if (isReset)
+                {
+                    Select(0);
+                    if (RegulationData.Regulations.FirstOrDefault(d => d.id == 0).optionBehaviour is not null and StringOption stringOption0)
+                    {
+                        stringOption0.oldValue = __instance.Value = 1;
+                        stringOption0.ValueText.text = ModTranslation.GetString("optionOn");
+                    }
+                }
+                Logger.Info(isReset.ToString());
+                return false;
+            }
+            return true;
+        }
+        option.UpdateSelection(option.selection - 1);
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
+public class AmongUsClientOnPlayerJoinedPatch
+{
+    public static void Postfix(PlayerControl __instance)
+    {
+        CustomOption.ShareOptionSelections();
     }
 }
 
@@ -915,158 +1033,6 @@ class GameOptionsMenuStartPatch
     }
 }
 
-[HarmonyPatch(typeof(KeyValueOption), nameof(KeyValueOption.OnEnable))]
-public class KeyValueOptionEnablePatch
-{
-    public static void Postfix(KeyValueOption __instance)
-    {
-        IGameOptions gameOptions = GameManager.Instance.LogicOptions.currentGameOptions;
-        if (__instance.Title == StringNames.GameMapName)
-        {
-            __instance.Selected = gameOptions.MapId;
-        }
-        try
-        {
-            __instance.ValueText.text = __instance.Values[Mathf.Clamp(__instance.Selected, 0, __instance.Values.Count - 1)].Key;
-        }
-        catch { }
-    }
-}
-
-[HarmonyPatch(typeof(StringOption), nameof(StringOption.OnEnable))]
-class StringOptionEnablePatch
-{
-    static bool Prefix(StringOption __instance)
-    {
-        CustomOption option = CustomOption.options.FirstOrDefault(option => option.optionBehaviour == __instance);
-        if (option == null)
-        {
-            RegulationData Regulation = RegulationData.Regulations.FirstOrDefault(regulation => regulation.optionBehaviour == __instance);
-            if (Regulation != null)
-            {
-                __instance.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-                __instance.TitleText.text = Regulation.title;
-                __instance.Value = __instance.oldValue = 0;
-                __instance.ValueText.text = RegulationData.Selected == Regulation.id ? ModTranslation.GetString("optionOn") : ModTranslation.GetString("optionOff");
-
-                return false;
-            }
-            return true;
-        }
-
-        __instance.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-        __instance.TitleText.text = option.GetName();
-        __instance.Value = __instance.oldValue = option.selection;
-        __instance.ValueText.text = option.GetString();
-
-        return false;
-    }
-}
-
-[HarmonyPatch(typeof(StringOption), nameof(StringOption.Increase))]
-public class StringOptionIncreasePatch
-{
-    public static bool Prefix(StringOption __instance)
-    {
-        CustomOption option = CustomOption.options.FirstOrDefault(option => option.optionBehaviour == __instance);
-        if (option == null)
-        {
-            RegulationData Regulation = RegulationData.Regulations.FirstOrDefault(regulation => regulation.optionBehaviour == __instance);
-            if (Regulation != null)
-            {
-                foreach (var regulation in RegulationData.Regulations)
-                {
-                    if (regulation.optionBehaviour is not null and StringOption stringOption)
-                    {
-                        stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-                        stringOption.TitleText.text = regulation.title;
-                        stringOption.oldValue = __instance.Value = 0;
-                        stringOption.ValueText.text = ModTranslation.GetString("optionOff");
-                    }
-                }
-                Select(Regulation.id);
-                __instance.oldValue = __instance.Value = 1;
-                __instance.ValueText.text = ModTranslation.GetString("optionOn");
-                return false;
-            }
-            return true;
-        }
-        option.UpdateSelection(option.selection + 1);
-        return false;
-    }
-}
-
-[HarmonyPatch(typeof(StringOption), nameof(StringOption.Decrease))]
-public class StringOptionDecreasePatch
-{
-    public static bool Prefix(StringOption __instance)
-    {
-        CustomOption option = CustomOption.options.FirstOrDefault(option => option.optionBehaviour == __instance);
-        if (option == null)
-        {
-            RegulationData Regulation = RegulationData.Regulations.FirstOrDefault(regulation => regulation.optionBehaviour == __instance);
-            if (Regulation != null)
-            {
-                bool isReset = true;
-                bool IsFirst = true;
-                if (Regulation.optionBehaviour is not null and StringOption stringOptiona)
-                {
-                    if (stringOptiona.Value == 0) return false;
-                }
-                foreach (var regulation in RegulationData.Regulations)
-                {
-                    if (regulation.optionBehaviour is not null and StringOption stringOption)
-                    {
-                        if (stringOption.ValueText.text == ModTranslation.GetString("optionOn"))
-                        {
-                            if (!IsFirst)
-                            {
-                                isReset = false;
-                            }
-                            IsFirst = false;
-                        }
-                    }
-                }
-                __instance.oldValue = __instance.Value = 0;
-                __instance.ValueText.text = ModTranslation.GetString("optionOff");
-                if (isReset)
-                {
-                    Select(0);
-                    if (RegulationData.Regulations.FirstOrDefault(d => d.id == 0).optionBehaviour is not null and StringOption stringOption0)
-                    {
-                        stringOption0.oldValue = __instance.Value = 1;
-                        stringOption0.ValueText.text = ModTranslation.GetString("optionOn");
-                    }
-                }
-                Logger.Info(isReset.ToString());
-                return false;
-            }
-            return true;
-        }
-        option.UpdateSelection(option.selection - 1);
-        return false;
-    }
-}
-
-[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
-public class AmongUsClientOnPlayerJoinedPatch
-{
-    public static void Postfix(PlayerControl __instance)
-    {
-        CustomOption.ShareOptionSelections();
-    }
-}
-
-[HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.ValueChanged))]
-public class GameOptionsMenuValueChangedPatch
-{
-    public static void Postfix()
-    {
-        GameOptionsDataPatch.UpdateData();
-    }
-}
-
-
 [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
 static class GameOptionsMenuUpdatePatch
 {
@@ -1206,6 +1172,7 @@ class GameSettingMenuStartPatch
     public static void Prefix(GameSettingMenu __instance)
     {
         __instance.HideForOnline = new Transform[] { };
+        __instance.Tabs.SetActive(true);
     }
 
     public static void Postfix(GameSettingMenu __instance)
@@ -1219,6 +1186,21 @@ class GameSettingMenuStartPatch
             i.position += new Vector3(0, num, 0);
         }
         __instance.Scroller.ContentYBounds.max += 0.5F;
+    }
+}
+
+[HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Close))]
+public static class GameSettingMenuClosePatch
+{
+    public static void Postfix()
+    {
+        if (CustomOption.IsValuesUpdated)
+        {
+            OptionSaver.WriteNowOptions();
+            CustomOption.IsValuesUpdated = false;
+        }
+        GameOptionsDataPatch.UpdateData();
+        LobbyBehaviourFixedUpdatePatch.setHudText(SuperNewRolesPlugin.optionsPage);
     }
 }
 
@@ -1479,8 +1461,6 @@ public static class LobbyBehaviourStartPatch
     {
         GameOptionsDataPatch.UpdateData();
         DestroyableSingleton<HudManager>.Instance.GameSettings.enableAutoSizing = false;
-        DestroyableSingleton<HudManager>.Instance.GameSettings.gameObject.SetActive(true);
-        LobbyBehaviourFixedUpdatePatch.setHudText(SuperNewRolesPlugin.optionsPage);
     }
 }
 
@@ -1502,9 +1482,7 @@ public static class LobbyBehaviourFixedUpdatePatch
         gameSettings.SetText(GameOptionsDataPatch.getHudString(page));
 
         //この処理がないと初回呼び出し時にpreferredWidth・Heightが変な値になる
-        gameSettings.rectTransform.localScale = Vector3.one;
-        Vector2 preferredDimensions = gameSettings.GetPreferredValues(GameOptionsDataPatch.getHudString(page), gameSettings.GetPreferredWidth(), 0);
-        gameSettings.rectTransform.sizeDelta = preferredDimensions;
+        gameSettings.GetPreferredValues(GameOptionsDataPatch.getHudString(page), gameSettings.GetPreferredWidth(), 0);
 
         float scaleX = Mathf.Clamp(gameSettings.rectTransform.rect.width / gameSettings.GetPreferredWidth(), 0f, 1f);
         float scaleY = Mathf.Clamp(gameSettings.rectTransform.rect.height / gameSettings.GetPreferredHeight(), 0f, 1f);
