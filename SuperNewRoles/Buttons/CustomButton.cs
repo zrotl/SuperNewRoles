@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +19,8 @@ public class CustomButton
             return buttons.FindAll(x => x.HasButton(IsAlive, Role));
         }
     }
+    private static bool isAliveCache;
+    private static RoleId roleCache;
     public ActionButton actionButton;
     public Vector3 PositionOffset;
     public Vector3 LocalScale = Vector3.one;
@@ -40,6 +44,8 @@ public class CustomButton
     private readonly KeyCode? hotkey;
     private readonly int joystickkey;
     private readonly Func<bool> StopCountCool;
+    private bool hasbutton;
+
     public CustomButton(Action OnClick, Func<bool, RoleId, bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, ActionButton textTemplate, KeyCode? hotkey, int joystickkey, Func<bool> StopCountCool, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "", Color? color = null)
     {
         this.hudManager = hudManager;
@@ -98,11 +104,18 @@ public class CustomButton
             }
         }
     }
-
-    public static void HudUpdate()
+    private static void buttonsUpdate(Action<CustomButton> action)
     {
         bool isAlive = PlayerControl.LocalPlayer.IsAlive();
         RoleId role = PlayerControl.LocalPlayer.GetRole();
+
+        if (isAlive != isAliveCache || role != roleCache)
+        {
+            Parallel.ForEach(buttons, btn => btn.CheckHasButton(isAlive, role));
+            isAliveCache = isAlive;
+            roleCache = role;
+        }
+
         List<int> removes = null;
         int index = 0;
         foreach (CustomButton btn in buttons)
@@ -114,58 +127,50 @@ public class CustomButton
                 removes.Add(index);
                 continue;
             }
+            action(btn);
+            index++;
+        }
+        if (removes != null)
+        {
+            foreach (int i in Enumerable.Reverse(removes))
+            {
+                buttons[i] = buttons[buttons.Count - 1];
+                buttons.RemoveAt(buttons.Count - 1);
+            }
+        }
+    }
+    public static void HudUpdate()
+    {
+        buttonsUpdate((CustomButton btn) => {
             try
             {
-                btn.Update(isAlive, role);
+                btn.Update();
             }
             catch (Exception e)
             {
                 System.Console.WriteLine("ButtonError:" + e);
             }
-            index++;
-        }
-        if (removes != null)
-        {
-            foreach (int i in removes)
-            {
-                buttons.RemoveAt(i);
-            }
-        }
+        });
     }
 
     public static void MeetingEndedUpdate()
     {
-        bool isAlive = PlayerControl.LocalPlayer.IsAlive();
-        RoleId role = PlayerControl.LocalPlayer.GetRole();
-        List<int> removes = null;
-        int index = 0;
-        foreach (CustomButton btn in buttons)
-        {
-            if (btn == null || btn.actionButton == null)
-            {
-                if (removes == null)
-                    removes = new();
-                removes.Add(index);
-                continue;
-            }
+        buttonsUpdate((CustomButton btn) => {
             try
             {
                 btn.OnMeetingEnds();
-                if (btn.HasButton(isAlive, role)) btn.Update(isAlive, role);
+                btn.Update();
             }
             catch (Exception e)
             {
                 if (ConfigRoles.DebugMode.Value) System.Console.WriteLine("MeetingEnd_ButtonError:" + e);
             }
-            index++;
-        }
-        if (removes != null)
-        {
-            foreach (int i in removes)
-            {
-                buttons.RemoveAt(i);
-            }
-        }
+        });
+    }
+
+    private void CheckHasButton(bool isAlive, RoleId role)
+    {
+        this.hasbutton = HasButton(isAlive, role);
     }
 
     public void SetActive(bool isActive)
@@ -192,17 +197,17 @@ public class CustomButton
         }
     }
 
-    private void Update(bool isAlive, RoleId role)
+    private void Update()
     {
         var localPlayer = CachedPlayer.LocalPlayer;
         var moveable = localPlayer.PlayerControl.moveable;
 
-        if (localPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton(isAlive, role))
+        if (!this.hasbutton || localPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || (!hudManager.UseButton.isActiveAndEnabled && !hudManager.PetButton.isActiveAndEnabled))
         {
             SetActive(false);
             return;
         }
-        SetActive(hudManager.UseButton.isActiveAndEnabled || hudManager.PetButton.isActiveAndEnabled);
+        SetActive(true);
 
         actionButton.graphic.sprite = Sprite;
         if (showButtonText && buttonText != "")
