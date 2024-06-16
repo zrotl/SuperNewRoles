@@ -37,8 +37,8 @@ public class NormalButtonDestroy
         if (PlayerControl.LocalPlayer.IsRole(RoleId.Neet) && hm.UseButton.gameObject.active)
             hm.UseButton.gameObject.SetActive(false);// 使用ボタンを無効化
 
-        if (!SetActiveDictionary.ContainsKey(PlayerControl.LocalPlayer.GetRole())) return;
-        if (!SetActiveDictionary[PlayerControl.LocalPlayer.GetRole()].Item2) return;
+        if (!SetActiveDictionary.TryGetValue(PlayerControl.LocalPlayer.GetRole(), out var value)) return;
+        if (!value.Item2) return;
         switch (SetActiveDictionary[PlayerControl.LocalPlayer.GetRole()].Item1)
         {
             case NormalButton.KillButton: // キルボタン

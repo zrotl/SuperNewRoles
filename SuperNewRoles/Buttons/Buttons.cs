@@ -346,7 +346,7 @@ static class HudManagerStartPatch
                 RoleClass.Jumbo.Killed = true;
                 PlayerControl.LocalPlayer.killTimer = killTimer;
             },
-            (bool isAlive, RoleId role) => { return isAlive && role == RoleId.Jumbo && PlayerControl.LocalPlayer.IsImpostor() && !RoleClass.Jumbo.Killed && RoleClass.Jumbo.JumboSize.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && RoleClass.Jumbo.JumboSize[PlayerControl.LocalPlayer.PlayerId] >= (CustomOptionHolder.JumboMaxSize.GetFloat() / 10); },
+            (bool isAlive, RoleId role) => { return isAlive && role == RoleId.Jumbo && PlayerControl.LocalPlayer.IsImpostor() && !RoleClass.Jumbo.Killed && RoleClass.Jumbo.JumboSize.TryGetValue(PlayerControl.LocalPlayer.PlayerId, out float value) && value >= (CustomOptionHolder.JumboMaxSize.GetFloat() / 10); },
             () =>
             {
                 return SetTarget(Crewmateonly: true) && PlayerControl.LocalPlayer.CanMove;
@@ -1373,7 +1373,7 @@ static class HudManagerStartPatch
                         PlayerControlFixedUpdatePatch.SetPlayerOutline(target, RoleClass.Sheriff.color);
 
                         (var killResult, var suicideResult) = Sheriff.SheriffKillResult(CachedPlayer.LocalPlayer, target);
-                        if (killResult.Item1 && target.IsRole(RoleId.Squid) && Squid.IsVigilance.ContainsKey(target.PlayerId) && Squid.IsVigilance[target.PlayerId])
+                        if (killResult.Item1 && target.IsRole(RoleId.Squid) && Squid.IsVigilance.TryGetValue(target.PlayerId, out bool value) && value)
                         {
                             killResult.Item1 = false;
                             Squid.SetVigilance(target, false);
