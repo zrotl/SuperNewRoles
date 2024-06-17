@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -111,7 +110,7 @@ public class CustomButton
 
         if (isAlive != isAliveCache || role != roleCache)
         {
-            Parallel.ForEach(buttons, btn => btn.CheckHasButton(isAlive, role));
+            foreach(CustomButton btn in buttons) btn.CheckHasButton(isAlive, role);
             isAliveCache = isAlive;
             roleCache = role;
         }
