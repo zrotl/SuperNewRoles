@@ -16,38 +16,46 @@ namespace SuperNewRoles.Modules;
 
 public class SetNamesClass
 {
-    public static Dictionary<int, string> AllNames = new();
+    public static string QuarreledSuffix = ModHelpers.Cs(RoleClass.Quarreled.color, " ○");
+    public static string LoversSuffix = ModHelpers.Cs(RoleClass.Lovers.color, " ♥");
+    public static string DemonSuffix = ModHelpers.Cs(RoleClass.Demon.color, " ▲");
+    public static string ArsonistSuffix = ModHelpers.Cs(RoleClass.Arsonist.color, " §");
+    public static string MoiraSuffix = " (→←)";
+    public static string SatsumaimoCrewSuffix = ModHelpers.Cs(Palette.White, " (C)");
+    public static string SatsumaimoMadSuffix = ModHelpers.Cs(RoleClass.ImpostorRed, " (M)");
 
-    public static void SetPlayerNameColor(PlayerControl p, Color color)
+    public static Dictionary<int, string> AllNames = new();
+    public static Dictionary<int, string> PlayerNameTexts = new();
+    public static Dictionary<int, string> PlayerNameSuffixes = new();
+    public static Dictionary<int, Color> PlayerNameColors = new();
+    public static Dictionary<int, string> PlayerRoleInfoTexts = new();
+
+    public static void ApplyAllPlayerNameTextAndColor()
     {
-        if (p.IsBot()) return;
-        p.NameText().color = color;
+        foreach (PlayerControl p in CachedPlayer.AllPlayers)
+        {
+            //if (p.IsBot()) continue;
+            if (PlayerNameTexts.TryGetValue(p.PlayerId, out string n)) p.NameText().text = ModHelpers.HidePlayerName(PlayerControl.LocalPlayer, p) ? "" : n;
+            if (PlayerNameColors.TryGetValue(p.PlayerId, out Color c)) p.NameText().color = c;
+        }
         if (MeetingHud.Instance)
         {
             foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
             {
-                if (p.PlayerId == player.TargetPlayerId)
-                {
-                    player.NameText.color = color;
-                }
+                if (PlayerNameTexts.TryGetValue(player.TargetPlayerId, out string n)) player.NameText.text = n;
+                if (PlayerNameColors.TryGetValue(player.TargetPlayerId, out Color c)) player.NameText.color = c;
             }
         }
+    }
+    public static void SetPlayerNameColor(PlayerControl p, Color color)
+    {
+        if (p.IsBot()) return;
+        PlayerNameColors[p.PlayerId] = color;
     }
     public static void SetPlayerNameText(PlayerControl p, string text)
     {
         if (p.IsBot()) return;
-        p.NameText().text = text;
-        if (MeetingHud.Instance)
-        {
-            foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
-            {
-                if (player.TargetPlayerId == p.PlayerId)
-                {
-                    player.NameText.text = text;
-                    return;
-                }
-            }
-        }
+        PlayerNameTexts[p.PlayerId] = text;
     }
     public static void ResetNameTagsAndColors()
     {
@@ -75,6 +83,23 @@ public class SetNamesClass
             }
         }
     }
+    public static void InitNameTagsAndColors()
+    {
+        PlayerRoleInfoTexts = new();
+        foreach (PlayerControl player in CachedPlayer.AllPlayers)
+        {
+            PlayerNameTexts[player.PlayerId] = player.CurrentOutfit.PlayerName;
+            if ((PlayerControl.LocalPlayer.IsImpostor() && (player.IsImpostor() || player.IsRole(RoleId.Spy, RoleId.Egoist))) || (ModeHandler.IsMode(ModeId.HideAndSeek) && player.IsImpostor()))
+            {
+                SetPlayerNameColor(player, RoleClass.ImpostorRed);
+            }
+            else
+            {
+                SetPlayerNameColor(player, Color.white);
+            }
+        }
+    }
+
     public static Dictionary<byte, TextMeshPro> PlayerInfos = new();
     public static Dictionary<byte, TextMeshPro> MeetingPlayerInfos = new();
 
@@ -247,16 +272,19 @@ public class SetNamesClass
     {
         SetPlayerRoleInfo(player);
     }
+    public static void SetSuffix()
+    {
+        //TODO
+    }
     public static void QuarreledSet()
     {
-        string suffix = ModHelpers.Cs(RoleClass.Quarreled.color, "○");
         if (PlayerControl.LocalPlayer.IsQuarreled() && PlayerControl.LocalPlayer.IsAlive())
         {
             PlayerControl side = PlayerControl.LocalPlayer.GetOneSideQuarreled();
-            SetPlayerNameText(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer.NameText().text + suffix);
+            SetPlayerNameText(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer.NameText().text + QuarreledSuffix);
             if (!side.Data.Disconnected)
             {
-                SetPlayerNameText(side, side.NameText().text + suffix);
+                SetPlayerNameText(side, side.NameText().text + QuarreledSuffix);
             }
         }
         if (CanGhostSeeRoles() && RoleClass.Quarreled.QuarreledPlayer != new List<List<PlayerControl>>())
@@ -267,7 +295,7 @@ public class SetNamesClass
                 {
                     if (!p.Data.Disconnected)
                     {
-                        SetPlayerNameText(p, p.NameText().text + suffix);
+                        SetPlayerNameText(p, p.NameText().text + QuarreledSuffix);
                     }
                 }
             }
@@ -284,14 +312,14 @@ public class SetNamesClass
 
     public static void LoversSet()
     {
-        string suffix = ModHelpers.Cs(RoleClass.Lovers.color, " ♥");
+
         if ((PlayerControl.LocalPlayer.IsLovers() || (PlayerControl.LocalPlayer.IsFakeLovers() && !PlayerControl.LocalPlayer.IsFakeLoversFake())) && PlayerControl.LocalPlayer.IsAlive())
         {
             PlayerControl side = PlayerControl.LocalPlayer.GetOneSideLovers();
             if (side == null) side = PlayerControl.LocalPlayer.GetOneSideFakeLovers();
-            SetPlayerNameText(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer.NameText().text + suffix);
+            SetPlayerNameText(PlayerControl.LocalPlayer, PlayerControl.LocalPlayer.NameText().text + LoversSuffix);
             if (!side.Data.Disconnected)
-                SetPlayerNameText(side, side.NameText().text + suffix);
+                SetPlayerNameText(side, side.NameText().text + LoversSuffix);
         }
         else if ((CanGhostSeeRoles() || PlayerControl.LocalPlayer.IsRole(RoleId.God)) && RoleClass.Lovers.LoversPlayer != new List<List<PlayerControl>>())
         {
@@ -300,7 +328,7 @@ public class SetNamesClass
                 foreach (PlayerControl p in ps)
                 {
                     if (!p.Data.Disconnected)
-                        SetPlayerNameText(p, p.NameText().text + suffix);
+                        SetPlayerNameText(p, p.NameText().text + LoversSuffix);
                 }
             }
         }
@@ -313,8 +341,8 @@ public class SetNamesClass
             {
                 if (Demon.IsViewIcon(player))
                 {
-                    if (!player.NameText().text.Contains(ModHelpers.Cs(RoleClass.Demon.color, " ▲")))
-                        SetPlayerNameText(player, player.NameText().text + ModHelpers.Cs(RoleClass.Demon.color, " ▲"));
+                    if (!player.NameText().text.Contains(DemonSuffix))
+                        SetPlayerNameText(player, player.NameText().text + DemonSuffix);
                 }
             }
         }
@@ -327,8 +355,8 @@ public class SetNamesClass
             {
                 if (Arsonist.IsViewIcon(player))
                 {
-                    if (!player.NameText().text.Contains(ModHelpers.Cs(RoleClass.Arsonist.color, " §")))
-                        SetPlayerNameText(player, player.NameText().text + ModHelpers.Cs(RoleClass.Arsonist.color, " §"));
+                    if (!player.NameText().text.Contains(ArsonistSuffix))
+                        SetPlayerNameText(player, player.NameText().text + ArsonistSuffix);
                 }
             }
         }
@@ -337,7 +365,7 @@ public class SetNamesClass
     {
         if (!Moira.AbilityUsedUp || Moira.AbilityUsedThisMeeting) return;
         if (Moira.Player is null) return;
-        SetPlayerNameText(Moira.Player, Moira.Player.NameText().text += " (→←)");
+        SetPlayerNameText(Moira.Player, Moira.Player.NameText().text += MoiraSuffix);
     }
     public static void CelebritySet()
     {
@@ -356,13 +384,13 @@ public class SetNamesClass
             foreach (SatsumaAndImo player in RoleBaseManager.GetRoleBases<SatsumaAndImo>())
             {
                 //クルーなら
-                if (!player.Player.NameText().text.Contains(ModHelpers.Cs(RoleClass.Arsonist.color, " (C)")) && player.TeamState == SatsumaAndImo.SatsumaTeam.Crewmate)
+                if (!player.Player.NameText().text.Contains(SatsumaimoCrewSuffix) && player.TeamState == SatsumaAndImo.SatsumaTeam.Crewmate)
                 {//名前に(C)をつける
-                    SetNamesClass.SetPlayerNameText(player.Player, player.Player.NameText().text + ModHelpers.Cs(Palette.White, " (C)"));
+                    SetNamesClass.SetPlayerNameText(player.Player, player.Player.NameText().text + SatsumaimoCrewSuffix);
                 }
-                if (!player.Player.NameText().text.Contains(ModHelpers.Cs(RoleClass.ImpostorRed, " (M)")) && player.TeamState == SatsumaAndImo.SatsumaTeam.Madmate)
+                if (!player.Player.NameText().text.Contains(SatsumaimoMadSuffix) && player.TeamState == SatsumaAndImo.SatsumaTeam.Madmate)
                 {
-                    SetNamesClass.SetPlayerNameText(player.Player, player.Player.NameText().text + ModHelpers.Cs(RoleClass.ImpostorRed, " (M)"));
+                    SetNamesClass.SetPlayerNameText(player.Player, player.Player.NameText().text + SatsumaimoMadSuffix);
                 }
             }
         }
@@ -372,13 +400,13 @@ public class SetNamesClass
             SatsumaAndImo satsumaAndImo = RoleBaseManager.GetLocalRoleBase<SatsumaAndImo>();
             if (satsumaAndImo == null)
                 return;
-            if (!player.NameText().text.Contains(ModHelpers.Cs(Palette.White, " (C)")) && satsumaAndImo.TeamState == SatsumaAndImo.SatsumaTeam.Crewmate)
+            if (!player.NameText().text.Contains(SatsumaimoCrewSuffix) && satsumaAndImo.TeamState == SatsumaAndImo.SatsumaTeam.Crewmate)
             {//名前に(C)をつける
-                SetNamesClass.SetPlayerNameText(player, player.NameText().text + ModHelpers.Cs(Palette.White, " (C)"));
+                SetNamesClass.SetPlayerNameText(player, player.NameText().text + SatsumaimoCrewSuffix);
             }
-            else if (!player.NameText().text.Contains(ModHelpers.Cs(RoleClass.ImpostorRed, " (M)")) && satsumaAndImo.TeamState == SatsumaAndImo.SatsumaTeam.Madmate)
+            else if (!player.NameText().text.Contains(SatsumaimoMadSuffix) && satsumaAndImo.TeamState == SatsumaAndImo.SatsumaTeam.Madmate)
             {
-                SetNamesClass.SetPlayerNameText(player, player.NameText().text + ModHelpers.Cs(RoleClass.ImpostorRed, " (M)"));
+                SetNamesClass.SetPlayerNameText(player, player.NameText().text + SatsumaimoMadSuffix);
             }
         }
     }
