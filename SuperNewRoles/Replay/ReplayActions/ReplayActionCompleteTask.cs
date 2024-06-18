@@ -31,7 +31,7 @@ public class ReplayActionCompleteTask : ReplayAction
         PlayerTask playerTask = player.myTasks.Find((Il2CppSystem.Predicate<PlayerTask>)((PlayerTask p) => p.Id == idx));
         if (playerTask)
         {
-            TaskInfo taskInfo = player.Data.FindTaskById(idx);
+            NetworkedPlayerInfo.TaskInfo taskInfo = player.Data.FindTaskById(idx);
             if (taskInfo != null)
             {
                 if (taskInfo.Complete)

@@ -255,7 +255,7 @@ public static class RoleSelectHandler
                 }
                 else
                 {
-                    Player.SetRole(RoleTypes.Crewmate); //ホスト視点用
+                    DestroyableSingleton<RoleManager>.Instance.SetRole(Player, RoleTypes.Crewmate); //ホスト視点用
                 }
                 sender.RpcSetRole(Player, RoleTypes.Impostor);
             }
@@ -277,7 +277,7 @@ public static class RoleSelectHandler
             else
             {
                 if (Player.PlayerId != 0) sender.RpcSetRole(Player, RoleTypes.Crewmate, Player.GetClientId());
-                else Player.SetRole(RoleTypes.Crewmate);
+                else DestroyableSingleton<RoleManager>.Instance.SetRole(Player, RoleTypes.Crewmate);
             }
             if (ModeHandler.GetMode() == ModeId.SuperHostRoles)
             {
@@ -330,14 +330,14 @@ public static class RoleSelectHandler
             foreach (var pc in PlayerControl.AllPlayerControls)
             {
                 if (pc.PlayerId == Player.PlayerId) continue;
-                if (pc.PlayerId == 0) Player.SetRole(RoleTypes.Scientist); //ホスト視点用
+                if (pc.PlayerId == 0) DestroyableSingleton<RoleManager>.Instance.SetRole(Player, RoleTypes.Scientist); //ホスト視点用
                 else sender.RpcSetRole(Player, RoleTypes.Scientist, pc.GetClientId());
             }
         }
         else
         {
             //Modクライアントは代わりに普通のクルーにする
-            Player.SetRole(RoleTypes.Crewmate); //Modクライアント視点用
+            DestroyableSingleton<RoleManager>.Instance.SetRole(Player, RoleTypes.Crewmate); //Modクライアント視点用
             sender.RpcSetRole(Player, RoleTypes.Crewmate);
         }
     }

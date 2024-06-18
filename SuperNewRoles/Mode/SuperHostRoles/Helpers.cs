@@ -48,7 +48,7 @@ public static class Helpers
         sender.StartRpc(player.NetId, RpcCalls.SetRole);
         sender.Write((ushort)role);
         sender.EndRpc();
-        player.SetRole(role);
+        DestroyableSingleton<RoleManager>.Instance.SetRole(player, role);
     }
 
     /// <summary>

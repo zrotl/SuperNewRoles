@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AmongUs.GameOptions;
 using SuperNewRoles.Helpers;
 using SuperNewRoles.Mode.SuperHostRoles;
 using UnityEngine;
@@ -132,14 +133,14 @@ public static class main
         foreach (PlayerControl player in PlayerControl.AllPlayerControls)
         {
             if (player.PlayerId == 0)
-                player.SetRole(AmongUs.GameOptions.RoleTypes.Impostor);
+                DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Impostor);
             else
                 player.RpcSetRoleDesync(AmongUs.GameOptions.RoleTypes.Impostor);
             foreach (PlayerControl p in PlayerControl.AllPlayerControls)
                 if (player.PlayerId != p.PlayerId)
                 {
                     if (p.PlayerId == 0)
-                        player.SetRole(AmongUs.GameOptions.RoleTypes.Scientist);
+                        DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Scientist);
                     else
                         player.RpcSetRoleDesync(AmongUs.GameOptions.RoleTypes.Scientist, p);
                 }

@@ -326,5 +326,5 @@ public partial class SuperNewRolesPlugin : BasePlugin
             }
         }
     }
-    public static void AgarthaLoad() => Agartha.AgarthaPlugin.Instance.Log.LogInfo("アガルタやで");
+    //public static void AgarthaLoad() => Agartha.AgarthaPlugin.Instance.Log.LogInfo("アガルタやで");
 }

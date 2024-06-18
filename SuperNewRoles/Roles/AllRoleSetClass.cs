@@ -19,14 +19,14 @@ using Object = UnityEngine.Object;
 
 namespace SuperNewRoles;
 
-[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetRole))]
-class SetRoleLogger
-{
-    public static void Postfix(PlayerControl __instance, RoleTypes role)
-    {
-        Logger.Info($"{__instance.Data.PlayerName} の役職が {role} になりました", "SetRole");
-    }
-}
+//[HarmonyPatch(typeof(PlayerControl), nameof(RoleManager.SetRole))]
+//class SetRoleLogger
+//{
+//    public static void Postfix(PlayerControl __instance, RoleTypes role)
+//    {
+//        Logger.Info($"{__instance.Data.PlayerName} の役職が {role} になりました", "SetRole");
+//    }
+//}
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSetRole))]
 class RpcSetRoleReplacer
 {

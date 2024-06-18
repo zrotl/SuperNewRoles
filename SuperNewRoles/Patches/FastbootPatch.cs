@@ -10,7 +10,7 @@ class SplashLogoAnimatorPatch
     {
         if (!IsAgarthaLoaded)
         {
-            SuperNewRolesPlugin.AgarthaLoad();
+            //SuperNewRolesPlugin.AgarthaLoad();
             IsAgarthaLoaded = true;
         }
         if (ConfigRoles.DebugMode.Value)

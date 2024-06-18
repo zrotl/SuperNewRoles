@@ -748,7 +748,7 @@ public static class MurderPlayerPatch
 
                 if (RoleClass.Camouflager.IsCamouflage)
                 {
-                    PlayerOutfit outfit = new()
+                    NetworkedPlayerInfo.PlayerOutfit outfit = new()
                     {
                         PlayerName = "　",
                         ColorId = RoleClass.Camouflager.Color,

@@ -34,10 +34,10 @@ public static class ReplayLoader
             Bot.RpcSetSkin(player.SkinId);
             if (player.IsBot)
                 BotManager.SetBot(Bot);
-            Bot.Data.Tasks = new Il2CppSystem.Collections.Generic.List<TaskInfo>(player.Tasks.Count);
+            Bot.Data.Tasks = new Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo.TaskInfo>(player.Tasks.Count);
             for (int i = 0; i < player.Tasks.Count; i++)
             {
-                Bot.Data.Tasks.Add(new TaskInfo(player.Tasks[i].Item2, player.Tasks[i].Item1));
+                Bot.Data.Tasks.Add(new NetworkedPlayerInfo.TaskInfo(player.Tasks[i].Item2, player.Tasks[i].Item1));
                 Bot.Data.Tasks[i].Id = player.Tasks[i].Item1;
             }
             Bot.SetTasks(Bot.Data.Tasks);
@@ -425,7 +425,7 @@ public static class ReplayLoader
                     else
                         Logger.Info(p.PlayerId + "の役職が参照できませんでした。");
                 }
-                p.SetRole(role);
+                DestroyableSingleton<RoleManager>.Instance.SetRole(p, role);
                 p.SetRole(roleid);
             }
             //ShowIntro();

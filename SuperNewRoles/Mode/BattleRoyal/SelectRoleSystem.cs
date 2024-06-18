@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using HarmonyLib;
+using InnerNet;
 using SuperNewRoles.Helpers;
 using SuperNewRoles.Mode.BattleRoyal.BattleRole;
 using SuperNewRoles.Mode.SuperHostRoles;
@@ -23,23 +24,23 @@ namespace SuperNewRoles.Mode.BattleRoyal
             }
         }
     }
-    [HarmonyPatch(typeof(GameData), nameof(GameData.Serialize))]
-    class GameDataSerializePatch
-    {
-        public static bool Is;
-        public static bool Prefix(GameData __instance, ref bool __result)
-        {
-            if (AmongUsClient.Instance is null || AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started || !ModeHandler.IsMode(ModeId.BattleRoyal) || Is || !Main.IsIntroEnded)
-            {
-                Is = false;
-                __result = true;
-                return true;
-            }
-            __instance.ClearDirtyBits();
-            __result = false;
-            return false;
-        }
-    }
+    //[HarmonyPatch(typeof(GameData), nameof(GameData.Serialize))]
+    //class GameDataSerializePatch
+    //{
+    //    public static bool Is;
+    //    public static bool Prefix(GameData __instance, ref bool __result)
+    //    {
+    //        if (AmongUsClient.Instance is null || AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started || !ModeHandler.IsMode(ModeId.BattleRoyal) || Is || !Main.IsIntroEnded)
+    //        {
+    //            Is = false;
+    //            __result = true;
+    //            return true;
+    //        }
+    //        __instance.ClearDirtyBits();
+    //        __result = false;
+    //        return false;
+    //    }
+    //}
     public static class SelectRoleSystem
     {
         public static void OnShowIntro()

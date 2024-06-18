@@ -252,7 +252,7 @@ public static class CustomRpcSenderExtensions
           .EndRpc();
         if (tarGetClientId == -1)
         {
-            player.SetRole(role);
+            DestroyableSingleton<RoleManager>.Instance.SetRole(player, role);
         }
     }
     public static void RpcMurderPlayer(this CustomRpcSender sender, PlayerControl player, PlayerControl target, int tarGetClientId = -1)

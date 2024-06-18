@@ -126,7 +126,7 @@ class Main
         if (targetAbility.CanRevive)
         {
             source.RpcSnapTo(target.transform.position);
-            GameDataSerializePatch.Is = true;
+            //GameDataSerializePatch.Is = true;
             RPCHelper.RpcSyncGameData();
         }
         else
@@ -408,7 +408,7 @@ class Main
                                     }
                                     else
                                     {
-                                        p.SetRole(RoleTypes.Shapeshifter);
+                                        DestroyableSingleton<RoleManager>.Instance.SetRole(p, RoleTypes.Shapeshifter);
                                     }
                                 }
                                 foreach (PlayerControl p2 in CachedPlayer.AllPlayers)
@@ -422,7 +422,7 @@ class Main
                             }
                             else
                             {
-                                p.SetRole(RoleTypes.Shapeshifter);
+                                DestroyableSingleton<RoleManager>.Instance.SetRole(p, RoleTypes.Shapeshifter);
                                 p.RpcSetRole(RoleTypes.Crewmate);
                                 FastDestroyableSingleton<RoleManager>.Instance.SetRole(PlayerControl.LocalPlayer, RoleTypes.Shapeshifter);
                                 CachedPlayer.LocalPlayer.Data.Role.Role = RoleTypes.Shapeshifter;

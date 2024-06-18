@@ -92,9 +92,9 @@ namespace SuperNewRoles.Replay.ReplayActions
             }
             [HarmonyPatch(nameof(PlayerControl.SetName))]
             [HarmonyPostfix]
-            public static void SetNamePatch(PlayerControl __instance, string name, bool dontCensor)
+            public static void SetNamePatch(PlayerControl __instance, string playerName)
             {
-                ReplayActionSetCosmetics.Create(__instance.PlayerId, ReplayCosmeticsType.Name, name, dontCensor: dontCensor);
+                ReplayActionSetCosmetics.Create(__instance.PlayerId, ReplayCosmeticsType.Name, playerName);
             }
             [HarmonyPatch(nameof(PlayerControl.CompleteTask))]
             [HarmonyPostfix]

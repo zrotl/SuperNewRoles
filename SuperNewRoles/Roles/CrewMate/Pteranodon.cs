@@ -82,18 +82,18 @@ public static class Pteranodon
             UsingPlayers[data.Key] = (data.Value.Item1, NewTimer, pos);
         }
     }
-    [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleAnimation))]
-    private static class PlayerPhysicsHandleAnimationPatch
-    {
-        private static void Postfix(PlayerPhysics __instance)
-        {
-            if ((__instance.myPlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId && IsPteranodonNow) ||
-                UsingPlayers.ContainsKey(__instance.myPlayer.PlayerId))
-            {
-                __instance.GetSkin().SetIdle(__instance.FlipX);
-            }
-        }
-    }
+    //[HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleAnimation))]
+    //private static class PlayerPhysicsHandleAnimationPatch
+    //{
+    //    private static void Postfix(PlayerPhysics __instance)
+    //    {
+    //        if ((__instance.myPlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId && IsPteranodonNow) ||
+    //            UsingPlayers.ContainsKey(__instance.myPlayer.PlayerId))
+    //        {
+    //            __instance.GetSkin().SetIdle(__instance.FlipX);
+    //        }
+    //    }
+    //}
     public static void FixedUpdate()
     {
         if (IsPteranodonNow)
