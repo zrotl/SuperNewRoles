@@ -99,17 +99,21 @@ public static class CachedPlayerPatches
         CachedPlayer.PlayerPtrs.Remove(__instance.Pointer);
     }
 
-    //[HarmonyPatch(typeof(GameData), nameof(GameData.Deserialize))]
-    //[HarmonyPostfix]
-    //public static void AddCachedDataOnDeserialize()
-    //{
-    //    foreach (CachedPlayer cachedPlayer in CachedPlayer.AllPlayers)
-    //    {
-    //        cachedPlayer.Data = cachedPlayer.PlayerControl.Data;
-    //        cachedPlayer.PlayerId = cachedPlayer.PlayerControl.PlayerId;
-    //        cachedPlayer.NetId = cachedPlayer.PlayerControl.NetId;
-    //    }
-    //}
+    [HarmonyPatch(typeof(NetworkedPlayerInfo), nameof(NetworkedPlayerInfo.Deserialize))]
+    [HarmonyPostfix]
+    public static void AddCachedDataOnDeserialize(NetworkedPlayerInfo __instance)
+    {
+        var cachedPlayer = CachedPlayer.AllPlayers.FirstOrDefault(p => p.PlayerControl.Pointer == ModHelpers.GetPlayerControl(__instance.PlayerId).Pointer);
+        cachedPlayer.Data = cachedPlayer.PlayerControl.Data;
+        cachedPlayer.PlayerId = cachedPlayer.PlayerControl.PlayerId;
+        cachedPlayer.NetId = cachedPlayer.PlayerControl.NetId;
+        //foreach (CachedPlayer cachedPlayer in CachedPlayer.AllPlayers)
+        //{
+        //    cachedPlayer.Data = cachedPlayer.PlayerControl.Data;
+        //    cachedPlayer.PlayerId = cachedPlayer.PlayerControl.PlayerId;
+        //    cachedPlayer.NetId = cachedPlayer.PlayerControl.NetId;
+        //}
+    }
 
     [HarmonyPatch(typeof(GameData), nameof(GameData.AddPlayer))]
     [HarmonyPostfix]
