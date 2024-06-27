@@ -160,8 +160,8 @@ public class MapCustomClearAndReload
         {
             AirshipSetting = MapCustom.AirshipSetting.GetBool();
             AgarthaSetting = MapCustom.AgarthaSetting.GetBool();
+            FungleSetting = MapCustom.TheFungleSetting.GetBool();
         }
-        FungleSetting = MapCustom.TheFungleSetting.GetBool();
 
         /*===============エアーシップ===============*/
         AirshipRandomSpawn = AirshipSetting && MapCustom.AirshipRandomSpawn.GetBool();
