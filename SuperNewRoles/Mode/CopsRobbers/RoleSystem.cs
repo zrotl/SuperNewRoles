@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using SuperNewRoles.Helpers;
 using SuperNewRoles.Mode.SuperHostRoles;
 using SuperNewRoles.Patches;
@@ -39,7 +40,6 @@ class RoleSystem
         if (player.IsMod()) return;
 
         string Name = player.GetDefaultName();
-        string NewName = "";
         Dictionary<byte, string> ChangePlayers = new();
 
         /*
@@ -63,22 +63,33 @@ class RoleSystem
         }
         */
 
-        string TaskText = "";
+        StringBuilder TaskText = new();
         if (!player.IsImpostor())
         {
             try
             {
-                if (commsActive) TaskText = ModHelpers.Cs(Color.yellow, "(?/" + TaskCount.TaskDateNoClearCheck(player.Data).Item2 + ")");
+                if (commsActive)
+                {
+                    TaskText.AppendCs(Color.yellow, "(?/", TaskCount.TaskDateNoClearCheck(player.Data).Item2.ToString(), ")");
+                }
                 else
                 {
                     var (Complete, all) = TaskCount.TaskDateNoClearCheck(player.Data);
-                    TaskText = ModHelpers.Cs(Color.yellow, "(" + Complete + "/" + all + ")");
+                    TaskText.AppendCs(Color.yellow, "(", Complete.ToString(), "/", all.ToString(), ")");
                 }
             }
             catch { }
         }
-        NewName = "<size=75%>" + CustomRoles.GetRoleNameOnColor(player) + TaskText + "</size>\n" + (CopsRobbersOptions.CRHideName.GetBool() && CopsRobbersOptions.CopsRobbersMode.GetBool() ? " " : ModHelpers.Cs(CustomRoles.GetRoleColor(player), Name));
-        player.RpcSetNamePrivate(NewName);
+        StringBuilder NewName = new();
+        NewName.Append("<size=75%>");
+        NewName.Append(CustomRoles.GetRoleNameOnColor(player));
+        NewName.Append(TaskText);
+        NewName.Append("</size>\n");
+        if (CopsRobbersOptions.CRHideName.GetBool() && CopsRobbersOptions.CopsRobbersMode.GetBool())
+            NewName.Append(" ");
+        else
+            NewName.AppendCs(CustomRoles.GetRoleColor(player), Name);
+        player.RpcSetNamePrivate(NewName.ToString());
     }
     public static void AssignRole()
     {

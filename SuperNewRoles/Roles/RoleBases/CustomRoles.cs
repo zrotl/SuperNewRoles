@@ -195,19 +195,19 @@ public static class CustomRoles
             return roleInfo.NameKey;
         return IntroData.GetIntrodata(role, player, IsImpostorReturn)?.NameKey;
     }
-    public static string GetRoleNameOnColor(PlayerControl player, bool IsImpostorReturn = false)
+    public static StringBuilder GetRoleNameOnColor(PlayerControl player, bool IsImpostorReturn = false)
     {
         return GetRoleNameOnColor(player.GetRole(), player, IsImpostorReturn);
     }
-    public static string GetRoleNameOnColor(RoleId role, PlayerControl player = null, bool IsImpostorReturn = false)
+    public static StringBuilder GetRoleNameOnColor(RoleId role, PlayerControl player = null, bool IsImpostorReturn = false)
     {
         RoleInfo roleInfo = RoleInfoManager.GetRoleInfo(role);
         if (roleInfo != null)
-            return CustomOptionHolder.Cs(roleInfo.RoleColor, $"{roleInfo.NameKey}Name");
+            return CustomOptionHolder.Csb(roleInfo.RoleColor, $"{roleInfo.NameKey}Name");
         IntroData intro = IntroData.GetIntrodata(role, player, IsImpostorReturn);
         if (intro == null)
             return null;
-        return CustomOptionHolder.Cs(intro.color, $"{intro?.NameKey}Name");
+        return CustomOptionHolder.Csb(intro.color, $"{intro?.NameKey}Name");
     }
     public static TeamRoleType GetRoleTeam(PlayerControl player, bool IsImpostorReturn = false)
     {

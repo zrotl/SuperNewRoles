@@ -34,16 +34,20 @@ public static class UpdateHandler
         if (main.LastCount != players.Count)
         {
             main.LastCount = players.Count;
-            string name = "\n\n\n\n\n\n\n\n<size=300%><color=white>" + ModeHandler.PlayingOnSuperNewRoles + "</size>\n\n\n\n\n\n\n\n\n\n\n\n\n\n<size=200%><color=white>" + string.Format(ModTranslation.GetString("CopsSpawnLoading"), NotLoadedCount);
+            StringBuilder name = new();
+            name.Append("\n\n\n\n\n\n\n\n<size=300%><color=white>");
+            name.Append(ModeHandler.PlayingOnSuperNewRoles);
+            name.Append("</size>\n\n\n\n\n\n\n\n\n\n\n\n\n\n<size=200%><color=white>");
+            name.AppendFormat(ModTranslation.GetString("CopsSpawnLoading"), NotLoadedCount);
             foreach (PlayerControl p in CachedPlayer.AllPlayers)
             {
                 if (!p.AmOwner)
                 {
-                    p.RpcSetNamePrivate(name);
+                    p.RpcSetNamePrivate(name.ToString());
                 }
                 else
                 {
-                    p.SetName(name);
+                    p.SetName(name.ToString());
                 }
             }
         }
@@ -75,14 +79,19 @@ public static class UpdateHandler
             //PlayerControl.LocalPlayer.RpcSetName(name);
             main.LastUpdateTime = main.ShowRoleTime;
             string RoleText = "";
-            string name = "\n\n\n\n\n<size=300%><color=white>{ROLETEXT}</size>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<size=200%>" + ModTranslation.GetString("PantsRoyalStartAt") + ((int)(main.LastUpdateTime + 1)).ToString() + ModTranslation.GetString("second") + "</size>";
+            StringBuilder name = new();
+            name.Append("\n\n\n\n\n<size=300%><color=white>{ROLETEXT}</size>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<size=200%>");
+            name.Append(ModTranslation.GetString("PantsRoyalStartAt"));
+            name.Append(((int)(main.LastUpdateTime + 1)).ToString());
+            name.Append(ModTranslation.GetString("second"));
+            name.Append("</size>");
             foreach (PlayerControl p in CachedPlayer.AllPlayers)
             {
                 if (main.IsPantsHaver(p))
                     RoleText = ModTranslation.GetString("PantsRoyalPantsHaverIntroName");
                 else
                     RoleText = ModTranslation.GetString("PantsRoyalPantsDontHaverIntroName");
-                string targetnametext = name.Replace("{ROLETEXT}", RoleText);
+                string targetnametext = name.Replace("{ROLETEXT}", RoleText).ToString();
                 if (!p.AmOwner)
                 {
                     p.RpcSetNamePrivate(targetnametext);
@@ -104,12 +113,19 @@ public static class UpdateHandler
         }
         if (main.ShowRoleTime <= 0)
         {
-            string RoleNameText = ModHelpers.Cs(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
-            string TaskText = ModHelpers.Cs(Color.yellow, "(334/802)");
+            StringBuilder RoleNameText = ModHelpers.Csb(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
+            StringBuilder TaskText = ModHelpers.Csb(Color.yellow, "(334/802)");
+            StringBuilder NewName;
             foreach (PlayerControl p in CachedPlayer.AllPlayers)
             {
                 CopsRobbers.Main.ClearAndReloads();
-                p.RpcSetName("<size=75%>" + RoleNameText + TaskText + "</size>\n" + p.GetDefaultName());
+                NewName = new();
+                NewName.Append("<size=75%>");
+                NewName.Append(RoleNameText);
+                NewName.Append(TaskText);
+                NewName.Append("</size>\n");
+                NewName.Append(p.GetDefaultName());
+                p.RpcSetName(NewName.ToString());
                 //if (CopsRobbersOptions.CRHideName.GetBool() && CopsRobbersOptions.CopsRobbersMode.GetBool()) ModeHandler.HideName();
                 if (GameManager.Instance.LogicOptions.currentGameOptions.MapId == (byte)MapNames.Airship)
                 {
@@ -138,8 +154,8 @@ public static class UpdateHandler
             main.CurrentTurnData.EndTurn();
         else
         {
-            string RoleNameText = ModHelpers.Cs(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
-            string TaskText = ModHelpers.Cs(Color.yellow, "(334/802)");
+            StringBuilder RoleNameText = ModHelpers.Csb(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
+            StringBuilder TaskText = ModHelpers.Csb(Color.yellow, "(334/802)");
             if (main.CurrentTurnData.TurnTimer <= 10)
             {
                 if (main.CurrentTurnData.LastUpdateCountdownTime >= 1)
@@ -148,18 +164,30 @@ public static class UpdateHandler
                     // 元の値が整数ならそのまま返す
                     if (main.CurrentTurnData.TurnTimer != time)
                         time++;
-                    string timetext = string.Format(ModTranslation.GetString("PantsRoyalTimeRemainingText"), time);
-                    string prefix = "<size=125%>" + ModHelpers.Cs(IntroData.CrewmateIntro.color, timetext) + "</size>\n<size=75%>" + RoleNameText + TaskText + "</size>\n";
+                    StringBuilder timetext = new();
+                    timetext.Append(ModHelpers.CsHead(IntroData.CrewmateIntro.color));
+                    timetext.AppendFormat(ModTranslation.GetString("PantsRoyalTimeRemainingText"), time);
+                    timetext.Append("</color>");
+                    StringBuilder prefix = new();
+                    prefix.Append("<size=125%>");
+                    prefix.Append(timetext);
+                    prefix.Append("</size>\n<size=75%>");
+                    prefix.Append(RoleNameText);
+                    prefix.Append(TaskText);
+                    prefix.Append("</size>\n");
                     foreach (PlayerControl p in PlayerControl.AllPlayerControls)
                     {
-                        string nametext = prefix + p.GetDefaultName() + "\n\n";
+                        StringBuilder nametext = new();
+                        nametext.Append(prefix);
+                        nametext.Append(p.GetDefaultName());
+                        nametext.Append("\n\n");
                         if (!p.AmOwner)
                         {
-                            p.RpcSetNamePrivate(nametext);
+                            p.RpcSetNamePrivate(nametext.ToString());
                         }
                         else
                         {
-                            p.SetName(nametext);
+                            p.SetName(nametext.ToString());
                         }
                     }
                     main.CurrentTurnData.LastUpdateCountdownTime = 0;
@@ -175,18 +203,30 @@ public static class UpdateHandler
                 // 元の値が整数ならそのまま返す
                 if (main.CurrentTurnData.TurnTimer != time)
                     time++;
-                string timetext = string.Format(ModTranslation.GetString("PantsRoyalTimeRemainingText"), time);
-                string prefix = "<size=125%>" + ModHelpers.Cs(IntroData.CrewmateIntro.color, timetext) + "</size>\n<size=75%>" + RoleNameText + TaskText + "</size>\n";
+                StringBuilder timetext = new();
+                timetext.Append(ModHelpers.CsHead(IntroData.CrewmateIntro.color));
+                timetext.AppendFormat(ModTranslation.GetString("PantsRoyalTimeRemainingText"), time);
+                timetext.Append("</color>");
+                StringBuilder prefix = new();
+                prefix.Append("<size=125%>");
+                prefix.Append(timetext);
+                prefix.Append("</size>\n<size=75%>");
+                prefix.Append(RoleNameText);
+                prefix.Append(TaskText);
+                prefix.Append("</size>\n");
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls)
                 {
-                    string nametext = prefix + p.GetDefaultName() + "\n\n";
+                    StringBuilder nametext = new();
+                    nametext.Append(prefix);
+                    nametext.Append(p.GetDefaultName());
+                    nametext.Append("\n\n");
                     if (!p.AmOwner)
                     {
-                        p.RpcSetNamePrivate(nametext);
+                        p.RpcSetNamePrivate(nametext.ToString());
                     }
                     else
                     {
-                        p.SetName(nametext);
+                        p.SetName(nametext.ToString());
                     }
                 }
                 main.CurrentTurnData.LastUpdateCountdownTime = 0;
@@ -196,14 +236,19 @@ public static class UpdateHandler
             {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls)
                 {
-                    string nametext = "<size=75%>" + RoleNameText + TaskText + "</size>\n" + p.GetDefaultName();
+                    StringBuilder nametext = new();
+                    nametext.Append("<size=75%>");
+                    nametext.Append(RoleNameText);
+                    nametext.Append(TaskText);
+                    nametext.Append("</size>\n");
+                    nametext.Append(p.GetDefaultName());
                     if (!p.AmOwner)
                     {
-                        p.RpcSetNamePrivate(nametext);
+                        p.RpcSetNamePrivate(nametext.ToString());
                     }
                     else
                     {
-                        p.SetName(nametext);
+                        p.SetName(nametext.ToString());
                     }
                 }
                 main.CurrentTurnData.CooldowntextReseted = true;
@@ -225,7 +270,12 @@ public static class UpdateHandler
         {
             main.CurrentTurnData.StartTimer -= Time.deltaTime;
             string RoleText = "";
-            string name = "\n\n\n\n\n<size=300%><color=white>{ROLETEXT}</size>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<size=200%>" + ModTranslation.GetString("PantsRoyalStartAt") + ((int)(main.CurrentTurnData.LastUpdateStartTimer + 1)).ToString() + ModTranslation.GetString("second") + "</size>";
+            StringBuilder name = new();
+            name.Append("\n\n\n\n\n<size=300%><color=white>{ROLETEXT}</size>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<size=200%>");
+            name.Append(ModTranslation.GetString("PantsRoyalStartAt"));
+            name.Append(((int)(main.CurrentTurnData.LastUpdateStartTimer + 1)).ToString());
+            name.Append(ModTranslation.GetString("second"));
+            name.Append("</size>");
             foreach (PlayerControl p in PlayerControl.AllPlayerControls)
             {
                 if (p.IsDead())
@@ -234,7 +284,7 @@ public static class UpdateHandler
                     RoleText = ModTranslation.GetString("PantsRoyalPantsHaverIntroName");
                 else
                     RoleText = ModTranslation.GetString("PantsRoyalPantsDontHaverIntroName");
-                string targetnametext = name.Replace("{ROLETEXT}", RoleText);
+                string targetnametext = name.Replace("{ROLETEXT}", RoleText).ToString();
                 if (!p.AmOwner)
                 {
                     p.RpcSetNamePrivate(targetnametext);
@@ -248,11 +298,18 @@ public static class UpdateHandler
         }
         if (main.CurrentTurnData.StartTimer <= 0)
         {
-            string RoleNameText = ModHelpers.Cs(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
-            string TaskText = ModHelpers.Cs(Color.yellow, "(334/802)");
+            StringBuilder RoleNameText = ModHelpers.Csb(IntroData.CrewmateIntro.color, IntroData.CrewmateIntro.Name);
+            StringBuilder TaskText = ModHelpers.Csb(Color.yellow, "(334/802)");
+            StringBuilder NewName;
             foreach (PlayerControl p in CachedPlayer.AllPlayers)
             {
-                p.RpcSetName("<size=75%>" + RoleNameText + TaskText + "</size>\n" + p.GetDefaultName());
+                NewName = new();
+                NewName.Append("<size=75%>");
+                NewName.Append(RoleNameText);
+                NewName.Append(TaskText);
+                NewName.Append("</size>\n");
+                NewName.Append(p.GetDefaultName());
+                p.RpcSetName(NewName.ToString());
                 //if (CopsRobbersOptions.CRHideName.GetBool() && CopsRobbersOptions.CopsRobbersMode.GetBool()) ModeHandler.HideName();
                 if (GameManager.Instance.LogicOptions.currentGameOptions.MapId == (byte)MapNames.Airship)
                 {

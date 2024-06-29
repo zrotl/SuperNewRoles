@@ -941,10 +941,35 @@ public static class ModHelpers
         if (room is null) return SystemTypes.Doors;
         return room.RoomId;
     }
-
-    public static string Cs(Color c, string s)
+    public static StringBuilder CsHead(Color c)
     {
-        return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", CustomOptionHolder.ToByte(c.r), CustomOptionHolder.ToByte(c.g), CustomOptionHolder.ToByte(c.b), CustomOptionHolder.ToByte(c.a), s);
+        StringBuilder r = new();
+        r.AppendFormat("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>", CustomOptionHolder.ToByte(c.r), CustomOptionHolder.ToByte(c.g), CustomOptionHolder.ToByte(c.b));
+        return r;
+    }
+    public static StringBuilder AppendColorTag(this StringBuilder sb, Color c)
+    {
+        sb.Insert(0, CsHead(c));
+        sb.Append("</color>");
+        return sb;
+    }
+    public static StringBuilder AppendCs(this StringBuilder sb, Color c, params string[] ss)
+    {
+        sb.Append(CsHead(c));
+        foreach(string s in ss) sb.Append(s);
+        sb.Append("</color>");
+        return sb;
+    }
+    public static StringBuilder Csb(Color c, params string[] ss)
+    {
+        StringBuilder r = new();
+        r.AppendCs(c, ss);
+        return r;
+    }
+    public static string Css(Color c, params string[] ss)
+    {
+        return Csb(c, ss).ToString();
+        //return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", CustomOptionHolder.ToByte(c.r), CustomOptionHolder.ToByte(c.g), CustomOptionHolder.ToByte(c.b), CustomOptionHolder.ToByte(c.a), s);
     }
     public static T GetRandom<T>(this Il2CppSystem.Collections.Generic.List<T> list)
     {

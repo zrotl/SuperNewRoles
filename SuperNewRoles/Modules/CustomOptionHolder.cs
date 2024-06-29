@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using SuperNewRoles.Patches;
 using SuperNewRoles.Roles;
 using SuperNewRoles.Roles.Attribute;
@@ -930,9 +931,10 @@ public class CustomOptionHolder
 
     internal static Dictionary<byte, byte[]> blockedRolePairings = new();
 
-    public static string Cs(Color c, string s)
+    public static StringBuilder Csb(Color c, string s)
     {
-        return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), ModTranslation.GetString(s));
+        return ModHelpers.Csb(c, ModTranslation.GetString(s));
+        //return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), ModTranslation.GetString(s));
     }
 
 

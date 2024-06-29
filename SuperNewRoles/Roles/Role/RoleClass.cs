@@ -1638,6 +1638,7 @@ public static class RoleClass
         public static List<PlayerControl> DemonPlayer;
         public static PlayerData<List<PlayerControl>> CurseData;
         public static Color32 color = new(110, 0, 165, byte.MaxValue);
+        public static string suffix = ModHelpers.Css(RoleClass.Demon.color, " ▲");
         public static bool IsUseVent;
         public static bool IsCheckImpostor;
         public static bool IsAliveWin;
@@ -1774,6 +1775,7 @@ public static class RoleClass
         public static List<PlayerControl> ArsonistPlayer;
         public static PlayerData<List<PlayerControl>> DouseData;
         public static Color32 color = new(238, 112, 46, byte.MaxValue);
+        public static string suffix = ModHelpers.Css(RoleClass.Arsonist.color, " §");
         public static bool IsUseVent;
         public static float CoolTime;
         public static float DurationTime;
@@ -2795,6 +2797,7 @@ public static class RoleClass
     {
         public static List<List<PlayerControl>> QuarreledPlayer;
         public static Color32 color = new(210, 105, 30, byte.MaxValue);
+        public static string suffix = ModHelpers.Css(RoleClass.Quarreled.color, "○");
         public static bool IsQuarreledWin;
         public static bool IsQuarreledSuicide;
         public static void ClearAndReload()
@@ -2808,6 +2811,7 @@ public static class RoleClass
     {
         public static List<List<PlayerControl>> LoversPlayer;
         public static Color32 color = new(255, 105, 180, byte.MaxValue);
+        public static string suffix = ModHelpers.Css(RoleClass.Lovers.color, " ♥");
         public static bool SameDie;
         public static bool AliveTaskCount;
         public static bool IsSingleTeam;

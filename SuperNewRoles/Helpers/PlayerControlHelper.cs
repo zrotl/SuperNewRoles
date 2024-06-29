@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using InnerNet;
 using SuperNewRoles.Roles;
 using SuperNewRoles.Roles.RoleBases;
@@ -75,20 +76,28 @@ public static class PlayerControlHelper
             var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             task.transform.SetParent(player.transform, false);
 
-            task.Text = ModHelpers.Cs(CustomRoles.GetRoleColor(roleId), $"{CustomRoles.GetRoleName(roleId)}: {CustomRoles.GetRoleIntro(roleId)}");
+            StringBuilder taskText = new();
+            taskText.Append($"{CustomRoles.GetRoleName(roleId)}: {CustomRoles.GetRoleIntro(roleId)}");
+            taskText.AppendColorTag(CustomRoles.GetRoleColor(roleId));
             if (player.IsLovers() || player.IsFakeLovers())
             {
-                task.Text += "\n" + ModHelpers.Cs(RoleClass.Lovers.color, ModTranslation.GetString("LoversName") + ": " + string.Format(ModTranslation.GetString("LoversIntro"), PlayerControl.LocalPlayer.GetOneSideLovers()?.Data?.PlayerName ?? ""));
+                StringBuilder loversText = new();
+                loversText.Append(ModTranslation.GetString("LoversName"));
+                loversText.Append(": ");
+                loversText.AppendFormat(ModTranslation.GetString("LoversIntro"), PlayerControl.LocalPlayer.GetOneSideLovers()?.Data?.PlayerName ?? "");
+                loversText.AppendColorTag(RoleClass.Lovers.color);
+
+                taskText.Append('\n');
+                taskText.Append(loversText);
             }
             if (!player.IsGhostRole(RoleId.DefaultRole))
             {
-                task.Text += "\n" + ModHelpers.Cs(
-                    CustomRoles.GetRoleColor(
-                        player.GetGhostRole()
-                        , player
-                    ),
-                    $"{CustomRoles.GetRoleName(player.GetGhostRole(),
-                    player)}: {CustomRoles.GetRoleIntro(player.GetGhostRole(), player)}");
+                StringBuilder ghostText = new();
+                ghostText.Append($"{CustomRoles.GetRoleName(player.GetGhostRole(), player)}: {CustomRoles.GetRoleIntro(player.GetGhostRole(), player)}");
+                ghostText.AppendColorTag(CustomRoles.GetRoleColor(player.GetGhostRole(), player));
+
+                taskText.Append("\n");
+                taskText.Append(ghostText);
             }
 
             player.myTasks.Insert(0, task);

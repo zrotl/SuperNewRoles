@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using SuperNewRoles.Roles;
 using SuperNewRoles.Roles.RoleBases;
 using UnityEngine;
@@ -63,9 +64,23 @@ class Intro
         }
 
         __instance.RoleText.text = CustomRoles.GetRoleName(PlayerControl.LocalPlayer);               //役職名を変更
-        __instance.RoleBlurbText.text = CustomRoles.GetRoleIntro(PlayerControl.LocalPlayer);     //イントロの簡易説明を変更
 
-        if (PlayerControl.LocalPlayer.IsLovers()) __instance.RoleBlurbText.text += "\n" + ModHelpers.Cs(RoleClass.Lovers.color, string.Format(ModTranslation.GetString("LoversIntro"), PlayerControl.LocalPlayer.GetOneSideLovers()?.GetDefaultName() ?? ""));
-        if (PlayerControl.LocalPlayer.IsQuarreled()) __instance.RoleBlurbText.text += "\n" + ModHelpers.Cs(RoleClass.Quarreled.color, string.Format(ModTranslation.GetString("QuarreledIntro"), PlayerControl.LocalPlayer.GetOneSideQuarreled()?.Data?.PlayerName ?? ""));
+        StringBuilder sb = new();
+        sb.Append(CustomRoles.GetRoleIntro(PlayerControl.LocalPlayer));
+        if (PlayerControl.LocalPlayer.IsLovers())
+        {
+            sb.Append("\n");
+            sb.Append(ModHelpers.CsHead(RoleClass.Lovers.color));
+            sb.AppendFormat(ModTranslation.GetString("LoversIntro"), PlayerControl.LocalPlayer.GetOneSideLovers()?.GetDefaultName() ?? "");
+            sb.Append("</color>");
+        }
+        if (PlayerControl.LocalPlayer.IsQuarreled())
+        {
+            sb.Append("\n");
+            sb.Append(ModHelpers.CsHead(RoleClass.Quarreled.color));
+            sb.AppendFormat(ModTranslation.GetString("QuarreledIntro"), PlayerControl.LocalPlayer.GetOneSideQuarreled()?.Data?.PlayerName ?? "");
+            sb.Append("</color>");
+        }
+        __instance.RoleBlurbText.text = sb.ToString();     //イントロの簡易説明を変更
     }
 }
