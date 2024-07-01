@@ -37,7 +37,7 @@ class Main
         writer.Write(random.PlayerId);
         writer.EndRPC();
         RPCProcedure.SetDetective(random.PlayerId);
-        DetectivePlayer.RpcSetName(ModHelpers.Cs(DetectiveColor, DetectivePlayer.GetDefaultName()));
-        DetectivePlayer.SetName(ModHelpers.Cs(DetectiveColor, DetectivePlayer.GetDefaultName()));
+        DetectivePlayer.RpcSetName(ModHelpers.Css(DetectiveColor, DetectivePlayer.GetDefaultName()));
+        DetectivePlayer.SetName(ModHelpers.Css(DetectiveColor, DetectivePlayer.GetDefaultName()));
     }
 }

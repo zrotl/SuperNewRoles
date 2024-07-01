@@ -78,14 +78,14 @@ public static class PlayerControlHelper
 
             StringBuilder taskText = new();
             taskText.Append($"{CustomRoles.GetRoleName(roleId)}: {CustomRoles.GetRoleIntro(roleId)}");
-            taskText.AppendColorTag(CustomRoles.GetRoleColor(roleId));
+            taskText = ModHelpers.Csb(CustomRoles.GetRoleColor(roleId), taskText);
             if (player.IsLovers() || player.IsFakeLovers())
             {
                 StringBuilder loversText = new();
                 loversText.Append(ModTranslation.GetString("LoversName"));
                 loversText.Append(": ");
                 loversText.AppendFormat(ModTranslation.GetString("LoversIntro"), PlayerControl.LocalPlayer.GetOneSideLovers()?.Data?.PlayerName ?? "");
-                loversText.AppendColorTag(RoleClass.Lovers.color);
+                loversText = ModHelpers.Csb(RoleClass.Lovers.color, loversText);
 
                 taskText.Append('\n');
                 taskText.Append(loversText);
@@ -94,7 +94,7 @@ public static class PlayerControlHelper
             {
                 StringBuilder ghostText = new();
                 ghostText.Append($"{CustomRoles.GetRoleName(player.GetGhostRole(), player)}: {CustomRoles.GetRoleIntro(player.GetGhostRole(), player)}");
-                ghostText.AppendColorTag(CustomRoles.GetRoleColor(player.GetGhostRole(), player));
+                ghostText = ModHelpers.Csb(CustomRoles.GetRoleColor(player.GetGhostRole(), player), ghostText);
 
                 taskText.Append("\n");
                 taskText.Append(ghostText);
